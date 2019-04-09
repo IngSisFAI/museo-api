@@ -25,17 +25,3 @@ const AreaSchema = new Schema({
 });
 
 module.exports = mongoose.model('Area', AreaSchema);
-
-// mongoose.connection.on('open', function () {
-//     A.on('index', function (err) {
-//       if (err) return done(err);
-//       A.create({ loc: { type: 'Point', coordinates: [-179.0, 0.0] }}, function (err) {
-//         if (err) return done(err);
-//         A.find({ loc: { $near: { type: 'Point', coordinates:[-179.0, 0.0] }}}, function (err, docs) {
-//           if (err) return done(err);
-//           console.log(docs);
-//           done();
-//         })
-//       })
-//     })
-//   });

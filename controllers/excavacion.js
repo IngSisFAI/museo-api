@@ -3,7 +3,7 @@ const Excavacion = require('../models/excavacion');
 const servicioExcavacion = require('../services/excavacion');
 
 // busca una excavacion por su ID - clave mongo
-const getExcavacion = (req, res) => servicioExcavacion.getExcavacion(req, res);
+const getAreaExcavacion = (req, res) => servicioExcavacion.getAreaExcavacion(req, res);
 
 function getExcavacionNombre(req, res) { // busca una excavacion por nombre
     let excavacion = req.params.excavacionId
@@ -14,13 +14,7 @@ function getExcavacionNombre(req, res) { // busca una excavacion por nombre
     })
 }
 
-function getExcavaciones(req, res){
-    Excavacion.find({},(err,excavaciones)=>{
-        if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
-        if(!excavaciones) return res.status(404).send({message:`No existen excavaciones`})
-        res.status(200).send({excavaciones: excavaciones})
-    })
-}
+const getExcavaciones = (req, res) => servicioExcavacion.getExcavaciones(req, res);
 
 function getExcavacionesHome(req,res){ //busca una excavacion para mostrar en home parametro 1 2 3
     let excavacion = req.params.excavacionId
@@ -33,7 +27,6 @@ function getExcavacionesHome(req,res){ //busca una excavacion para mostrar en ho
 
 function getExcavacionesDirector(req,res){
     let directorId = req.params.excavacionId
-    //console.log("API-REST: ExcavacionesDirector con:"+ directorId)
     Excavacion.find({'directorId':directorId},(err,excavaciones)=>{
         if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
         if(!excavaciones) return res.status(404).send({message:`No existen excavaciones con el Director: ... `+ directorId})
@@ -43,7 +36,6 @@ function getExcavacionesDirector(req,res){
 
 function getExcavacionesPaleontologo(req,res){
     let paleontologo = req.params.excavacionId
-    //console.log("API-REST: ExcavacionesPaleontologo con:"+ paleontologo)
     Excavacion.find({'paleontologo':paleontologo},(err,excavaciones)=>{
         if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
         if(!excavaciones) return res.status(404).send({message:`No existen excavaciones con el Paleontologo: ... `+ paleontologo})
@@ -53,15 +45,12 @@ function getExcavacionesPaleontologo(req,res){
 
 function getExcavacionesColector(req,res){
     let colector = req.params.excavacionId
-    //console.log("API-REST: ExcavacionesColector con:"+ colector);
     Excavacion.find({'colector':colector},(err,excavaciones)=>{
         if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
         if(!excavaciones) return res.status(404).send({message:`No existen excavaciones con el Director: ... `+ colector})
         res.status(200).send({excavaciones: excavaciones})
     })
 }
-
-
 
 function saveExcavacion(req,res){
     console.log('POST /api/excavacion')
@@ -105,7 +94,6 @@ function getExcavacionId(req, res) { // busca una excavacion por su ID - clave m
         res.status(200).send({excavacionId: excavacionId})
     })
 }
-
 
 function updateExcavacion(req,res){
     let excavacionId= req.params.excavacionId
@@ -163,7 +151,6 @@ function getExcavacionesFiltroCode(req, res){
    
 }
 
-
 function getExcavacionesFiltroName(req, res){
    let nombre = req.params.unNombre
   
@@ -175,31 +162,13 @@ function getExcavacionesFiltroName(req, res){
    
 }
 
-
-
-
 const crearExcavacion = (req, res) => servicioExcavacion.crearExcavacion(req, res);
-// let excavacion = new Excavacion();
-// excavacion.codigo = req.body.codigo
-// excavacion.nombre = req.body.nombre
-// excavacion.descripcion = req.body.descripcion
-// excavacion.puntoGps = req.body.puntoGps
-// excavacion.fechaInicio = req.body.fechaInicio
-// excavacion.fechaBaja = req.body.fechaBaja
-// excavacion.motivoBaja = req.body.motivoBaja
-// excavacion.director = req.body.director
-// excavacion.directorId = req.body.directorId
-// excavacion.paleontologo = req.body.paleontologo
-// excavacion.colector = req.body.colector
-// excavacion.area = req.body.area
-// excavacion.localidad = req.body.localidad
-// excavacion.provincia = req.body.provincia
-// excavacion.bochonesEncontrados = req.body.bochonesEncontrados
-// excavacion.fotosExcavacion = req.body.fotosExcavacion
-// excavacion.videosExcavacion = req.body.videosExcavacion
-// excavacion.muestraHome = req.body.muestraHome
 
 const modificarExcavacion = (req, res) => servicioExcavacion.modificarExcavacion(req, res);
+
+const modificarAreaExcavacion = (req, res) => servicioExcavacion.modificarAreaExcavacion(req, res);
+
+const borrarExcavaciones = (req, res) => servicioExcavacion.borrarExcavaciones(req, res);
 
 module.exports = {
     getExcavaciones,
@@ -217,5 +186,9 @@ module.exports = {
 	deleteExcavacion,
 	getExcavacionesFiltro,
 	getExcavacionesFiltroCode,
-	getExcavacionesFiltroName
+	getExcavacionesFiltroName,
+    getExcavacionCompleta,
+    getAreaExcavacion,
+    modificarAreaExcavacion,
+    borrarExcavaciones,
 };

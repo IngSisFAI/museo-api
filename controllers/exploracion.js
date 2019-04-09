@@ -1,6 +1,6 @@
 'use strict'
 
-const Exploracion = require('../models/exploracion')
+const Exploracion = require('../models/exploracion');
 
 
 function getExploraciones(req, res){
@@ -80,12 +80,38 @@ function getExploracionesFiltro(req, res){
    
 }
 
+const getExploracionById = (req, res) => servicioExploracion.getExploracionById(req, res);
 
-module.exports ={
-    getExploraciones,
-	saveExploracion,
-	getExploracionId,
-	updateExploracion,
-	deleteExploracion,
-	getExploracionesFiltro
-}
+const getExploraciones = (req, res) => servicioExploracion.getExploraciones(req, res);
+
+const crearAreaExploracion = (req, res) => {
+  const areaExploracion = {
+    puntos: req.body.areaExploracion,
+  };
+
+  return servicioExploracion.crearAreaExploracion(areaExploracion)
+  .then(exploracion => res.status(200).send({ exploracion }))
+  .catch(() => res.status(500).send({ message: 'Error al insertar la exploracion en la Base de Datos'}))
+};
+
+const borrarExploraciones = (req, res) => {
+  servicioExploracion.borrarExploraciones()
+  .then(() => res.status(200).send({message: `Las exploraciones han sido eliminadas`}))
+  .catch(err => res.status(500).send({message:`Error al borrar la exploracion: ${err}`}));
+};
+
+const modificarAreaExploracion = (req, res) => servicioExploracion.modificarAreaExploracion(req, res);
+
+module.exports = {
+  getExploracionById,
+  getExploraciones,
+  crearAreaExploracion,
+  borrarExploraciones,
+  modificarAreaExploracion,
+  getExploraciones,
+  saveExploracion,
+  getExploracionId,
+  updateExploracion,
+  deleteExploracion,
+  getExploracionesFiltro,
+};

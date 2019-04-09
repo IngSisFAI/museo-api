@@ -3,6 +3,7 @@
 const express = require('express')
 const personaCtrl = require('../controllers/persona')
 const excavacionCtrl = require ('../controllers/excavacion')
+const exploracionCtrl = require ('../controllers/exploracion')
 const bochonCtrl = require('../controllers/bochon')
 const piezaCtrl = require('../controllers/pieza')
 const ejemplarCtrl = require('../controllers/ejemplar')
@@ -31,25 +32,16 @@ api.get('/personaNombreDNI/:unNombre&:unDni', personaCtrl.getPersonaNombreDNI)
 api.get('/personaApellidoDNI/:unApellido&:unDni', personaCtrl.getPersonaApellidoDNI)
 
 // Excavacion
-api.get('/excavacion', excavacionCtrl.getExcavaciones)
+api.get('/areaExcavacion/:excavacionId', excavacionCtrl.getAreaExcavacion)
+api.get('/areasExcavaciones', excavacionCtrl.getExcavaciones)
 api.get('/excavacionNombre/:excavacionId',excavacionCtrl.getExcavacionNombre)
 api.get('/excavacionHome/:excavacionId', excavacionCtrl.getExcavacionesHome)
 api.get('/excavacionDirector/:excavacionId', excavacionCtrl.getExcavacionesDirector)
 api.get('/excavacionPaleontologo/:excavacionId', excavacionCtrl.getExcavacionesPaleontologo)
 api.get('/excavacionColector/:excavacionId',excavacionCtrl.getExcavacionesColector)
-
-api.get('/excavacionId/:excavacionId',excavacionCtrl.getExcavacionId)
-api.post('/excavacion', excavacionCtrl.saveExcavacion)
-api.put('/excavacion/:excavacionId', excavacionCtrl.updateExcavacion)
-api.delete('/excavacion/:excavacionId',excavacionCtrl.deleteExcavacion)
-api.get('/excavacionFiltro/:unCodigo&:unNombre', excavacionCtrl.getExcavacionesFiltro)
-api.get('/excavacionFiltroCode/:unCodigo', excavacionCtrl.getExcavacionesFiltroCode)
-api.get('/excavacionFiltroName/:unNombre', excavacionCtrl.getExcavacionesFiltroName)
-
-api.get('/excavacion/:excavacionId', excavacionCtrl.getExcavacion)
-
-api.put('/excavacion', excavacionCtrl.modificarExcavacion)
-//api.delete('/excavacion', excavacionCtrl.removeExcavacion)
+api.post('/areaExcavacion', excavacionCtrl.crearExcavacion)
+api.put('/areaExcavacion/:excavacionId', excavacionCtrl.modificarAreaExcavacion)
+api.delete('/excavacion', excavacionCtrl.borrarExcavaciones)
 
 api.get('/bochon',bochonCtrl.getbochones)
 api.get('/bochonId/:bochonId',bochonCtrl.getbochonId)
@@ -69,6 +61,13 @@ api.get('/ejemplarNroColeccion/:ejemplarId', ejemplarCtrl.getejemplarNroColeccio
 api.get('/ejemplarHome/:ejemplarId',ejemplarCtrl.getejemplarHome)
 api.get('/ejemplarExca/:ejemplarId',ejemplarCtrl.getejemplarExca)
 api.post('/ejemplar', ejemplarCtrl.saveEjemplar)
+
+// Exploracion
+api.get('/areaExploracion/:exploracionId', exploracionCtrl.getExploracionById)
+api.get('/areaExploracion', exploracionCtrl.getExploraciones)
+api.post('/areaExploracion', exploracionCtrl.crearAreaExploracion)
+api.delete('/exploracion', exploracionCtrl.borrarExploraciones)
+api.put('/areaExploracion/:exploracionId', exploracionCtrl.modificarAreaExploracion)
 
 
 // Area
