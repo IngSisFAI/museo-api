@@ -1,7 +1,6 @@
 'use strict'
 
 const express = require('express')
-const productCtrl = require('../controllers/product')
 const personaCtrl = require('../controllers/persona')
 const excavacionCtrl = require ('../controllers/excavacion')
 const bochonCtrl = require('../controllers/bochon')
@@ -11,12 +10,6 @@ const homeCtrl = require('../controllers/home')
 const api = express.Router()
 
 api.get('/info',homeCtrl.getHome) // obtiene todos los datos del Home unico documento
-
-api.get('/product',productCtrl.getProducts) //obtiene todos los productos
-api.get('/product/:productId',productCtrl.getProduct) // obtiene el producto cuyo id es productId
-api.post('/product',productCtrl.saveProduct) //inserta un nuevo producto
-api.put('/product/:productId',productCtrl.updateProduct) // actualiza un producto cuyo id es productId
-api.delete('/product/:productId',productCtrl.deleteProduct) // borra el producto cuyo id es productId
 
 api.get('/persona', personaCtrl.getPersonas)
 api.get('/personaId/:personaId', personaCtrl.getPersonaId)
@@ -48,6 +41,7 @@ api.get('/ejemplar', ejemplarCtrl.getejemplares)
 api.get('/ejemplarId/:ejemplarId',ejemplarCtrl.getejemplarId)
 api.get('/ejemplarNroColeccion/:ejemplarId', ejemplarCtrl.getejemplarNroColeccion)
 api.get('/ejemplarHome/:ejemplarId',ejemplarCtrl.getejemplarHome)
+api.get('/ejemplarExca/:ejemplarId',ejemplarCtrl.getejemplarExca)
 api.post('/ejemplar', ejemplarCtrl.saveEjemplar)
 
 

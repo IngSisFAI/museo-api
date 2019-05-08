@@ -24,7 +24,8 @@ const PiezaSchema = Schema({
    fechaIngreso:Date,
    fechaBaja:Date,
    motivoBaja:String,
-   perteneceEjemplar: String
+   perteneceEjemplar: String,
+   origen: {type: String, enum:['ExcavaciónPropia', 'Donación','Préstamo']}
 })
 
 module.exports = mongoose.model('Pieza', PiezaSchema)

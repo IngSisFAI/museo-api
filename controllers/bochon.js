@@ -51,6 +51,8 @@ function saveBochon(req,res){
     bochon.tipoPreparacion = req.body.tipoPreparacion
     bochon.acidosAplicados = req.body.acidosAplicados
     bochon.ejemplaresAsociados = req.body.ejemplaresAsociados
+    bochon.excavacionId = req.body.excavacionId
+    bochon.piezaId = req.body.piezaId
 
     bochon.save((err,bochonStored)=> {
         if(err) res.status(500).send({message:`Error al salvar en la Base de Datos:${err}`})

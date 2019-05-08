@@ -54,7 +54,8 @@ const EjemplarSchema = Schema({
    descripcion1:String,
    descripcion1A:String,
    descripcion2:String,
-   descripcion3:String
+   descripcion3:String,
+   perteneceExca:String
 })
 
 module.exports = mongoose.model('Ejemplar', EjemplarSchema)

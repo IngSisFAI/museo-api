@@ -50,6 +50,7 @@ function savePieza(req,res){
     pieza.fechaBaja = req.body.fechaBaja
     pieza.motivoBaja = req.body.motivoBaja
     pieza.perteneceEjemplar = req.body.perteneceEjemplar
+    pieza.origen = req.body.origen
     
     pieza.save((err,piezaStored)=> {
         if(err) res.status(500).send({message:`Error al salvar en la Base de Datos:${err}`})

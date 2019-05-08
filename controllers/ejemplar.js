@@ -20,6 +20,15 @@ function getejemplarNroColeccion(req, res) { // busca un ejemplar por nro de col
     })
 }
 
+function getejemplarExca(req, res) { // busca los ejemplares que pertenecen a una excavación
+    let ejemplar = req.params.ejemplarId
+    Ejemplar.find({'perteneceExca':ejemplar}, (err,ejemplar)=>{
+        if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
+        if(!ejemplar) return res.status(404).send({message:`No hay ejemplares para la excavacion`})
+        res.status(200).send({ejemplar: ejemplar})
+    })
+}
+
 function getejemplares(req, res){
     Ejemplar.find({},(err,ejemplares)=>{
         if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
@@ -71,6 +80,7 @@ function saveEjemplar(req,res){
     ejemplar.descripcion1A=req.body.descripcion1A
     ejemplar.descripcion2=req.body.descripcion2
     ejemplar.descripcion3=req.body.descripcion3
+    ejemplar.perteneceExca=req.body.perteneceExca
     
     ejemplar.save((err,ejemplarStrored)=> {
         if(err) res.status(500).send({message:`Error al salvar en la Base de Datos:${err}`})
@@ -83,5 +93,6 @@ module.exports ={
    getejemplares,
    getejemplarId,
    getejemplarHome,
+   getejemplarExca,
    saveEjemplar
 }
