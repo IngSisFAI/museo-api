@@ -1,4 +1,12 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
 
-node_modules/
+# dependencies
+/node_modules
+
+# misc
+.DS_Store
+.env.local
+
+npm-debug.log*
 
 \.idea/
