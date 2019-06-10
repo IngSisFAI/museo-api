@@ -97,6 +97,75 @@ function getPersonasFiltro(req, res){
 	
 }
 
+
+function getPersonaNroDoc(req, res) { // busca una persona por DNI
+    let persona = req.params.personaId
+    Persona.find({'dni':persona}, (err,persona)=>{
+        if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
+        if(!persona) return res.status(404).send({message:`La persona no existe buscada`})
+        res.status(200).send({personas: persona})
+    })
+}
+
+function getPersonaName(req, res) { // busca una persona por DNI
+    let persona = req.params.personaId
+    Persona.find({'nombres':persona}, (err,persona)=>{
+        if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
+        if(!persona) return res.status(404).send({message:`La persona no existe buscada`})
+        res.status(200).send({personas: persona})
+    })
+}
+
+function getPersonaApellido(req, res) { // busca una persona por DNI
+    let persona = req.params.personaId
+    Persona.find({'apellidos':persona}, (err,persona)=>{
+        if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
+        if(!persona) return res.status(404).send({message:`La persona no existe buscada`})
+        res.status(200).send({personas: persona})
+    })
+}
+
+function getPersonaNombreApellido(req, res){
+   let nombre = req.params.unNombre
+   let apellido = req.params.unApellido
+   
+   
+		Persona.find({ 'nombres':nombre,'apellidos':apellido}, (err,persona)=>{
+			if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
+			if(!persona) return res.status(404).send({message:`La persona no existe buscada`})
+			res.status(200).send({personas: persona})
+		})
+
+}
+
+
+function getPersonaNombreDNI(req, res){
+   let dni = req.params.unDni
+   let nombre = req.params.unNombre
+  
+   
+		Persona.find({ 'dni':dni,'nombres':nombre}, (err,persona)=>{
+			if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
+			if(!persona) return res.status(404).send({message:`La persona no existe buscada`})
+			res.status(200).send({personas: persona})
+		})
+	
+}
+
+function getPersonaApellidoDNI(req, res){
+   let dni = req.params.unDni
+   let apellido = req.params.unApellido
+   
+   
+		Persona.find({ 'dni':dni,'apellidos':apellido}, (err,persona)=>{
+			if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
+			if(!persona) return res.status(404).send({message:`La persona no existe buscada`})
+			res.status(200).send({personas: persona})
+		})	
+}
+
+
+
 module.exports ={
     getPersonaId,
     getPersonaDni,
@@ -104,6 +173,12 @@ module.exports ={
     savePersona,
 	deletePersona,
 	updatePersona,
-	getPersonasFiltro
+	getPersonasFiltro,
+	getPersonaNroDoc,
+	getPersonaName,
+	getPersonaApellido,
+	getPersonaNombreApellido,
+	getPersonaNombreDNI,
+	getPersonaApellidoDNI
 	
 }

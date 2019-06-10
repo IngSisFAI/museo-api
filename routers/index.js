@@ -8,6 +8,10 @@ const piezaCtrl = require('../controllers/pieza')
 const ejemplarCtrl = require('../controllers/ejemplar')
 const homeCtrl = require('../controllers/home')
 const exploracionCtrl = require('../controllers/exploracion')
+const paisCtrl = require('../controllers/pais')
+const provinciaCtrl = require('../controllers/provincia')
+const ciudadCtrl = require('../controllers/ciudad')
+
 const api = express.Router()
 
 api.get('/info',homeCtrl.getHome) // obtiene todos los datos del Home unico documento
@@ -18,7 +22,13 @@ api.get('/personaDni/:personaId', personaCtrl.getPersonaDni)
 api.post('/persona', personaCtrl.savePersona)
 api.delete('/persona/:personaId',personaCtrl.deletePersona) // borra el producto cuyo id es productId
 api.put('/persona/:personaId',personaCtrl.updatePersona) // actualiza un producto
-api.get('/personasFiltro/:unDni?&:unNombre?&:unApellido?', personaCtrl.getPersonasFiltro)
+api.get('/personasFiltro/:unDni&:unNombre&:unApellido', personaCtrl.getPersonasFiltro)
+api.get('/personaNroDoc/:personaId', personaCtrl.getPersonaNroDoc)
+api.get('/personaName/:personaId', personaCtrl.getPersonaName)
+api.get('/personaApellido/:personaId', personaCtrl.getPersonaApellido)
+api.get('/personaNombreApellido/:unNombre&:unApellido', personaCtrl.getPersonaNombreApellido)
+api.get('/personaNombreDNI/:unNombre&:unDni', personaCtrl.getPersonaNombreDNI)
+api.get('/personaApellidoDNI/:unApellido&:unDni', personaCtrl.getPersonaApellidoDNI)
 
 // Excavacion
 api.get('/excavacion', excavacionCtrl.getExcavaciones)
@@ -28,8 +38,16 @@ api.get('/excavacionDirector/:excavacionId', excavacionCtrl.getExcavacionesDirec
 api.get('/excavacionPaleontologo/:excavacionId', excavacionCtrl.getExcavacionesPaleontologo)
 api.get('/excavacionColector/:excavacionId',excavacionCtrl.getExcavacionesColector)
 
+api.get('/excavacionId/:excavacionId',excavacionCtrl.getExcavacionId)
+api.post('/excavacion', excavacionCtrl.saveExcavacion)
+api.put('/excavacion/:excavacionId', excavacionCtrl.updateExcavacion)
+api.delete('/excavacion/:excavacionId',excavacionCtrl.deleteExcavacion)
+api.get('/excavacionFiltro/:unCodigo&:unNombre', excavacionCtrl.getExcavacionesFiltro)
+api.get('/excavacionFiltroCode/:unCodigo', excavacionCtrl.getExcavacionesFiltroCode)
+api.get('/excavacionFiltroName/:unNombre', excavacionCtrl.getExcavacionesFiltroName)
+
 api.get('/excavacion/:excavacionId', excavacionCtrl.getExcavacion)
-api.post('/excavacion', excavacionCtrl.crearExcavacion)
+
 api.put('/excavacion', excavacionCtrl.modificarExcavacion)
 //api.delete('/excavacion', excavacionCtrl.removeExcavacion)
 
@@ -66,6 +84,19 @@ api.get('/exploracionId/:exploracionId', exploracionCtrl.getExploracionId)
 api.get('/exploracionesFiltro/:unNombre', exploracionCtrl.getExploracionesFiltro)
 api.put('/exploracion/:exploracionId',exploracionCtrl.updateExploracion) // actualiza un producto
 api.delete('/exploracion/:exploracionId',exploracionCtrl.deleteExploracion)
+
+
+//pais
+api.get('/pais', paisCtrl.getPaises)
+
+//provincia
+api.get('/provincia', provinciaCtrl.getProvincias)
+api.get('/provinciaIdPais/:paisId', provinciaCtrl.getProvinciaIdPais)
+
+//Ciudad
+api.get('/ciudad', ciudadCtrl.getCiudades)
+api.get('/ciudadIdProv/:provId', ciudadCtrl.getCiudadIdProv)
+
 
 
 

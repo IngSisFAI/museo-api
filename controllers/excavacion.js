@@ -61,6 +61,123 @@ function getExcavacionesColector(req,res){
     })
 }
 
+
+
+function saveExcavacion(req,res){
+    console.log('POST /api/excavacion')
+    console.log(req.body)
+      
+    let excavacion = new Excavacion()
+    excavacion.nombre = req.body.nombre
+	excavacion.codigo = req.body.codigo
+    excavacion.descripcion = req.body.descripcion
+	excavacion.fechaInicio = req.body.fechaInicio
+	excavacion.fechaBaja = req.body.fechaBaja
+	excavacion.motivoBaja = req.body.motivoBaja
+	excavacion.director = req.body.director
+	excavacion.directorId = req.body.directorId
+	excavacion.colector = req.body.colector
+	excavacion.paleontologo = req.body.paleontologo
+	excavacion.bochonesEncontrados = req.body.bochonesEncontrados
+	
+	excavacion.puntoGPS = req.body.puntoGPS
+	excavacion.idArea = req.body.idArea
+	excavacion.idExploracion = req.body.idExploracion
+	excavacion.idPais = req.body.idPais
+	excavacion.idCiudad = req.body.idCiudad
+	excavacion.idProvincia = req.body.idProvincia
+	
+	excavacion.muestraHome=req.body.muestraHome
+	
+	
+    
+    excavacion.save((err,excavacionStored)=> {
+        if(err) res.status(500).send({message:`Error al salvar en la Base de Datos:${err}`})
+        res.status(200).send({excavacion: excavacionStored})
+    })
+}
+
+function getExcavacionId(req, res) { // busca una excavacion por su ID - clave mongo
+    let excavacionId = req.params.excavacionId
+    Excavacion.findById(excavacionId, (err,excavacionId)=>{
+        if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
+        if(!excavacionId) return res.status(404).send({message:`La excavacion no existe`})
+        res.status(200).send({excavacionId: excavacionId})
+    })
+}
+
+
+function updateExcavacion(req,res){
+    let excavacionId= req.params.excavacionId
+    let update= req.body
+    console.log('POST /api/excavacion/:ExcavacionId UpdateExcavacion......')
+    console.log(req.body)
+    
+    Excavacion.findByIdAndUpdate(excavacionId, update, (err, excavacionUpdate)=>{
+        if(err) return  res.status(500).send({message: `Error al tratar de actualizar: ${err}`})
+        if(!excavacionUpdate) return res.status(404).send({message:`La excavacion Update no Existe`})
+        res.status(200).send({excavacion: excavacionUpdate})
+    
+    })
+}
+
+function deleteExcavacion(req,res){
+    let excavacionId = req.params.excavacionId
+	
+	Excavacion.findByIdAndRemove(excavacionId, (err, excavacion) => {
+		// As always, handle any potential errors:
+		if (err) return res.status(500).send(err);
+		// We'll create a simple object to send back with a message and the id of the document that was removed
+		// You can really do this however you want, though.
+		const response = {
+			message: "Excavacion satisfactoriamente borrada",
+			id: excavacion._id
+		};
+		return res.status(200).send(response);
+	});
+
+}
+
+function getExcavacionesFiltro(req, res){
+   let codigo = req.params.unCodigo
+   let nombre = req.params.unNombre
+ 
+   
+   
+		Excavacion.find({ 'codigo':codigo,'nombre':nombre}, (err,excavacion)=>{
+			if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
+			if(!excavacion) return res.status(404).send({message:`La excavacion no existe buscada`})
+			res.status(200).send({excavaciones: excavacion})
+		})
+   
+}
+
+function getExcavacionesFiltroCode(req, res){
+   let codigo = req.params.unCodigo
+  
+		Excavacion.find({ 'codigo':codigo}, (err,excavacion)=>{
+			if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
+			if(!excavacion) return res.status(404).send({message:`La excavacion no existe buscada`})
+			res.status(200).send({excavaciones: excavacion})
+		})
+   
+}
+
+
+function getExcavacionesFiltroName(req, res){
+   let nombre = req.params.unNombre
+  
+		Excavacion.find({ 'nombre':nombre}, (err,excavacion)=>{
+			if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
+			if(!excavacion) return res.status(404).send({message:`La excavacion no existe buscada`})
+			res.status(200).send({excavaciones: excavacion})
+		})
+   
+}
+
+
+
+
 const crearExcavacion = (req, res) => servicioExcavacion.crearExcavacion(req, res);
 // let excavacion = new Excavacion();
 // excavacion.codigo = req.body.codigo
@@ -94,4 +211,11 @@ module.exports = {
     crearExcavacion,
     getExcavacion,
     modificarExcavacion,
+	saveExcavacion,
+	getExcavacionId,
+	updateExcavacion,
+	deleteExcavacion,
+	getExcavacionesFiltro,
+	getExcavacionesFiltroCode,
+	getExcavacionesFiltroName
 };

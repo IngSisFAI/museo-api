@@ -18,11 +18,12 @@ const PointSchema = new mongoose.Schema({
     type: [Number],
     required: true
   }
-});
+}); 
 
 const ExcavacionSchema = Schema({
   idExcavacion: String,
   nombre: String,
+  codigo: String,
   puntoGps: PointSchema,
   fechaInicio: Date,
   fechaBaja: Date,
