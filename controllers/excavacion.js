@@ -2,7 +2,10 @@
 const Excavacion = require('../models/excavacion');
 const servicioExcavacion = require('../services/excavacion');
 
+
 // busca una excavacion por su ID - clave mongo
+const getExcavacion = (req, res) => servicioExcavacion.getExcavacion(req, res);
+
 const getAreaExcavacion = (req, res) => servicioExcavacion.getAreaExcavacion(req, res);
 
 function getExcavacionNombre(req, res) { // busca una excavacion por nombre
@@ -187,7 +190,6 @@ module.exports = {
 	getExcavacionesFiltro,
 	getExcavacionesFiltroCode,
 	getExcavacionesFiltroName,
-    getExcavacionCompleta,
     getAreaExcavacion,
     modificarAreaExcavacion,
     borrarExcavaciones,

@@ -3,6 +3,37 @@ const servicioArea = require('./area');
 const servicioExploracion = require('./exploracion');
 
 
+getExcavacion = (req, res) => {
+  const excavacionId = req.params.excavacionId;
+  let excavacionCompleta = {};
+
+  return Excavacion.findById(excavacionId)
+  .then(excavacion => {
+    Object.assign(excavacionCompleta, excavacion._doc);
+  
+    servicioArea.getAreaById(excavacion.idArea)
+    .then(area => {
+      excavacionCompleta.areaExcavacion = area;
+
+      servicioExploracion.getExploracionById(excavacion.idExploracion)
+      .then(exploracion => {
+        excavacionCompleta.exploracion = exploracion;
+
+        servicioArea.getAreaById(exploracion.idArea)
+        .then(area => {
+          let areaExploracion = {};
+          Object.assign(areaExploracion, area._doc);
+          excavacionCompleta.areaExploracion = areaExploracion;
+
+          res.status(200).send({ excavacionCompleta });
+        })
+      });
+    })
+    .catch(err => res.status(500).send({message:`Error al realizar la petición: ${err}`}));
+  })
+  .catch(err => res.status(500).send({message:`Error al realizar la petición`}));
+};
+
 getExcavaciones = (req, res) => {
   return Excavacion.find()
   .then(excavaciones => {

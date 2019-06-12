@@ -1,15 +1,7 @@
 'use strict'
-
+const servicioExploracion = require('../services/exploracion');
 const Exploracion = require('../models/exploracion');
 
-
-function getExploraciones(req, res){
-    Exploracion.find({},(err,exploraciones)=>{
-        if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
-        if(!exploraciones) return res.status(404).send({message:`No existen exploraciones`})
-        res.status(200).send({exploraciones: exploraciones})
-    })
-}
 
 function saveExploracion(req,res){
     console.log('POST /api/exploracion')
@@ -108,7 +100,6 @@ module.exports = {
   crearAreaExploracion,
   borrarExploraciones,
   modificarAreaExploracion,
-  getExploraciones,
   saveExploracion,
   getExploracionId,
   updateExploracion,
