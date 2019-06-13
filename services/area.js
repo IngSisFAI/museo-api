@@ -13,7 +13,7 @@ crearArea = areaData => {
     type: 'Polygon',
     coordinates: [coordinates],
   };
-
+  
   const area = new Area({
     nombre: 'area 1',
     idCiudad: 14, // Neuquen
@@ -25,14 +25,11 @@ crearArea = areaData => {
   return area.save();
 };
 
-modificarArea = (req, res) => {
-  return res.status(200).send({ result: 'update an area' });
-    // const { areaId } = req.params;
-    // Area.update({ _id: areaId }, req.body, (err, value) => {
-    //     if (err) return res.status(500).send(`Error al intentar modificar el area: ${areaId}`);
-    //     if (value.n > 0) return res.status(200).send();
-    //     return res.status(400).send('Bad Request');
-    //     });
+modificarArea = (idArea, nuevaArea) => {
+  const locacion = {
+    coordinates: [nuevaArea.map(c => [ c.lat, c.lng ])],
+  };
+  return Area.update({ _id: idArea }, { $set: { locacion }});
 };
 
 eliminarArea = (req, res) => {
@@ -48,6 +45,6 @@ eliminarArea = (req, res) => {
 module.exports = {
   getAreaById,
   crearArea,
-  // modificarArea,
-  // eliminarArea,
+  modificarArea,
+  eliminarArea,
 };

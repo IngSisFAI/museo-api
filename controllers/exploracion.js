@@ -1,15 +1,7 @@
 'use strict'
+const servicioExploracion = require('../services/exploracion');
+const Exploracion = require('../models/exploracion');
 
-const Exploracion = require('../models/exploracion')
-
-
-function getExploraciones(req, res){
-    Exploracion.find({},(err,exploraciones)=>{
-        if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
-        if(!exploraciones) return res.status(404).send({message:`No existen exploraciones`})
-        res.status(200).send({exploraciones: exploraciones})
-    })
-}
 
 function saveExploracion(req,res){
     console.log('POST /api/exploracion')
@@ -80,12 +72,37 @@ function getExploracionesFiltro(req, res){
    
 }
 
+const getExploracionById = (req, res) => servicioExploracion.getExploracionById(req, res);
 
-module.exports ={
-    getExploraciones,
-	saveExploracion,
-	getExploracionId,
-	updateExploracion,
-	deleteExploracion,
-	getExploracionesFiltro
-}
+const getExploraciones = (req, res) => servicioExploracion.getExploraciones(req, res);
+
+const crearAreaExploracion = (req, res) => {
+  const areaExploracion = {
+    puntos: req.body.areaExploracion,
+  };
+
+  return servicioExploracion.crearAreaExploracion(areaExploracion)
+  .then(exploracion => res.status(200).send({ exploracion }))
+  .catch(() => res.status(500).send({ message: 'Error al insertar la exploracion en la Base de Datos'}))
+};
+
+const borrarExploraciones = (req, res) => {
+  servicioExploracion.borrarExploraciones()
+  .then(() => res.status(200).send({message: `Las exploraciones han sido eliminadas`}))
+  .catch(err => res.status(500).send({message:`Error al borrar la exploracion: ${err}`}));
+};
+
+const modificarAreaExploracion = (req, res) => servicioExploracion.modificarAreaExploracion(req, res);
+
+module.exports = {
+  getExploracionById,
+  getExploraciones,
+  crearAreaExploracion,
+  borrarExploraciones,
+  modificarAreaExploracion,
+  saveExploracion,
+  getExploracionId,
+  updateExploracion,
+  deleteExploracion,
+  getExploracionesFiltro,
+};

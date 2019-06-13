@@ -22,6 +22,7 @@ const PointSchema = new mongoose.Schema({
 
 const ExcavacionSchema = Schema({
   idExcavacion: String,
+  codigo: String,
   nombre: String,
   codigo: String,
   puntoGps: PointSchema,
@@ -35,7 +36,7 @@ const ExcavacionSchema = Schema({
   colector: String,
 
   idExploracion: { type: String, ref: 'Exploracion' },
-  idArea: { type: String, ref: 'Area' },  
+  idArea: { type: String, ref: 'Area' },
   idCiudad: { type: String, ref: 'Ciudad' },
   idProvincia: { type: String, ref: 'Provincia' },
   idPais: { type: String, ref: 'Pais' },

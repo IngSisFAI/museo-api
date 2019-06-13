@@ -31,7 +31,6 @@ function getbochones(req, res){
 
 function getbochonEjemplar(req, res) { // busca un bochon por su ejemplar Asociado
     let ejemAsociado = req.params.bochonId
-    console.log("******"+ejemAsociado);
     Bochon.find({'ejemplarAsociado':ejemAsociado}, (err,bochon)=>{
         if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
         if(!bochon) return res.status(404).send({message:`El bochon no existe buscada`})
