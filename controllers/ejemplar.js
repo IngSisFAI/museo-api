@@ -61,6 +61,7 @@ function saveEjemplar(req,res){
     ejemplar.taxonEspecie = req.body.taxonEspecie
     ejemplar.eraGeologica = req.body.eraGeologica
     ejemplar.ilustracionCompleta = req.body.ilustracionCompleta
+	ejemplar.descripcionIC = req.body.descripcionIC
     ejemplar.areaHallazgo = req.body.areaHallazgo
     ejemplar.nroColeccion = req.body.nroColeccion
     ejemplar.dimensionLargo = req.body.dimensionLargo
@@ -80,11 +81,146 @@ function saveEjemplar(req,res){
     ejemplar.descripcion1A=req.body.descripcion1A
     ejemplar.descripcion2=req.body.descripcion2
     ejemplar.descripcion3=req.body.descripcion3
-    ejemplar.perteneceExca=req.body.perteneceExca
+    ejemplar.perteneceExca=req.body.perteneceExca  
+	
+
     
     ejemplar.save((err,ejemplarStrored)=> {
-        if(err) res.status(500).send({message:`Error al salvar en la Base de Datos:${err}`})
-        res.status(200).send({ejemplar: ejemplarStrored})
+        if(err) {res.status(500).send({message:`Error al salvar en la Base de Datos:${err}`}) 
+		   console.log(err)
+		}
+         res.status(200).send({ejemplar: ejemplarStrored})
+		 
+    })
+}
+
+function updateEjemplar(req,res){
+    let ejemplarId= req.params.ejemplarId
+    let update= req.body
+    console.log('POST /api/ejemplar/:ejemplarId UpdatePersona......')
+    console.log(req.body)
+    
+    Ejemplar.findByIdAndUpdate(ejemplarId, update, (err, ejemplarUpdate)=>{
+        if(err) return  res.status(500).send({message: `Error al tratar de actualizar: ${err}`})
+        if(!ejemplarUpdate) return res.status(404).send({message:`La persona Update no Existe`})
+        res.status(200).send({ejemplar: ejemplarUpdate})
+    
+    })
+}
+
+function deleteEjemplar(req,res){
+    let ejemplarId = req.params.ejemplarId
+	
+	Ejemplar.findByIdAndRemove(ejemplarId, (err, ejemplar) => {
+		// As always, handle any potential errors:
+		if (err) return res.status(500).send(err);
+		// We'll create a simple object to send back with a message and the id of the document that was removed
+		// You can really do this however you want, though.
+		const response = {
+			message: "Ejemplar satisfactoriamente borrada",
+			id: ejemplar._id
+		};
+		return res.status(200).send(response);
+	});
+
+}
+
+
+function getEjemplaresFiltro(req, res){
+   let nroColeccion = req.params.unNroColeccion
+   let nombre = req.params.unNombre
+   let ubicacion = req.params.unaUbicacion
+ 
+		Ejemplar.find({ 'nroColeccion':nroColeccion,'nombre':nombre, 'ubicacionMuseo':ubicacion}, (err,ejemplar)=>{
+			if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
+			if(!ejemplar) return res.status(404).send({message:`El ejemplar buscado no existe`})
+			res.status(200).send({ejemplares: ejemplar})
+		})
+   
+}
+
+function getEjemplaresNroColNom(req, res){
+   let nroColeccion = req.params.unNroColeccion
+   let nombre = req.params.unNombre
+   
+ 
+		Ejemplar.find({ 'nroColeccion':nroColeccion,'nombre':nombre}, (err,ejemplar)=>{
+			if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
+			if(!ejemplar) return res.status(404).send({message:`El ejemplar buscado no existe`})
+			res.status(200).send({ejemplares: ejemplar})
+		})
+   
+}
+
+function getEjemplaresUbicacionNom(req, res){
+   let ubicacion = req.params.unaUbicacion
+   let nombre = req.params.unNombre
+   
+ 
+		Ejemplar.find({ 'ubicacionMuseo':ubicacion,'nombre':nombre}, (err,ejemplar)=>{
+			if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
+			if(!ejemplar) return res.status(404).send({message:`El ejemplar buscado no existe`})
+			res.status(200).send({ejemplares: ejemplar})
+		})
+   
+}
+
+function getEjemplaresUbicacionNroCol(req, res){
+   let ubicacion = req.params.unaUbicacion
+   let nroColeccion = req.params.unNroColeccion
+   
+ 
+		Ejemplar.find({ 'ubicacionMuseo':ubicacion,'nroColeccion':nroColeccion}, (err,ejemplar)=>{
+			if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
+			if(!ejemplar) return res.status(404).send({message:`El ejemplar buscado no existe`})
+			res.status(200).send({ejemplares: ejemplar})
+		})
+   
+}
+
+
+function getEjemplaresNroColeccion(req, res){
+   let nroColeccion = req.params.unNroColeccion
+   
+ 
+		Ejemplar.find({'nroColeccion':nroColeccion}, (err,ejemplar)=>{
+			if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
+			if(!ejemplar) return res.status(404).send({message:`El ejemplar buscado no existe`})
+			res.status(200).send({ejemplares: ejemplar})
+		})
+   
+}
+
+
+function getEjemplaresNombre(req, res){
+   let nombre = req.params.unNombre
+   
+ 
+		Ejemplar.find({'nombre':nombre}, (err,ejemplar)=>{
+			if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
+			if(!ejemplar) return res.status(404).send({message:`El ejemplar buscado no existe`})
+			res.status(200).send({ejemplares: ejemplar})
+		})
+   
+}
+
+function getEjemplaresUbicacion(req, res){
+   let ubicacion = req.params.unaUbicacion
+
+		Ejemplar.find({ 'ubicacionMuseo':ubicacion}, (err,ejemplar)=>{
+			if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
+			if(!ejemplar) return res.status(404).send({message:`El ejemplar buscado no existe`})
+			res.status(200).send({ejemplares: ejemplar})
+		})
+   
+}
+
+function getEjemplarPorIdFoto(req, res) { // busca una excavacion por nombre
+    let ejemplar = req.params.fotoId
+    Ejemplar.findOne({'fotosEjemplar._id':ejemplar}, (err,ejemplar)=>{
+        if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
+        if(!ejemplar) return res.status(404).send({message:`Ejemplar buscado no existe`})
+        res.status(200).send({ejemplar: ejemplar})
     })
 }
 
@@ -94,5 +230,15 @@ module.exports ={
    getejemplarId,
    getejemplarHome,
    getejemplarExca,
-   saveEjemplar
+   saveEjemplar,
+   updateEjemplar,
+   deleteEjemplar,
+   getEjemplaresFiltro,
+   getEjemplaresNroColNom,
+   getEjemplaresUbicacionNom,
+   getEjemplaresUbicacionNroCol,
+   getEjemplaresNroColeccion,
+   getEjemplaresNombre,
+   getEjemplaresUbicacion,
+   getEjemplarPorIdFoto
 }

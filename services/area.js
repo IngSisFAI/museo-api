@@ -13,7 +13,7 @@ crearArea = areaData => {
     type: 'Polygon',
     coordinates: [coordinates],
   };
-  
+
   const area = new Area({
     nombre: 'area 1',
     idCiudad: 14, // Neuquen
@@ -27,24 +27,33 @@ crearArea = areaData => {
 
 modificarArea = (idArea, nuevaArea) => {
   const locacion = {
-    coordinates: [nuevaArea.map(c => [ c.lat, c.lng ])],
+    coordinates: [nuevaArea.map(c => [c.lat, c.lng])],
   };
-  return Area.update({ _id: idArea }, { $set: { locacion }});
+  return Area.update({ _id: idArea }, { $set: { locacion } });
 };
 
 eliminarArea = (req, res) => {
-    return res.status(200).send({ result: 'area eliminada' });
-    // const { areaId } = req.params;
-    // Area.remove({ '_id': areaId }, (err, value) => {
-    //     if (err) return res.status(500).send(`Error al intentar eliminar area: ${areaId}`);
-    //     if (value.result.n > 0) return res.status(200).send();
-    //     return res.status(400).send('Bar Request');
-    //     });
+  return res.status(200).send({ result: 'area eliminada' });
+  // const { areaId } = req.params;
+  // Area.remove({ '_id': areaId }, (err, value) => {
+  //     if (err) return res.status(500).send(`Error al intentar eliminar area: ${areaId}`);
+  //     if (value.result.n > 0) return res.status(200).send();
+  //     return res.status(400).send('Bar Request');
+  //     });
 };
+
+getAreas = (req, res) => {
+  Area.find({}, (err, areas) => {
+    if (err) return res.status(500).send({ message: `Error al realizar la petición: ${err}` })
+    if (!areas) return res.status(404).send({ message: `No existen areas` })
+    res.status(200).send({ areas: areas })
+  })
+}
 
 module.exports = {
   getAreaById,
   crearArea,
   modificarArea,
   eliminarArea,
+  getAreas
 };

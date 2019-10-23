@@ -8,7 +8,7 @@ const PersonaSchema = Schema({
     apellidos: String,
     dni: Number,//numero plano sin puntos
     fechaInicio: Date,
-    titulos:[String],
+    titulos:String,
     foto: String, // foto de la persona es un archivo.jpg donde se almacenan todas las fotos de les personas
     fechaBaja: Date,
     motivoBaja:String,

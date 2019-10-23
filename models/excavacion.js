@@ -5,7 +5,8 @@ const Schema  = mongoose.Schema;
 
 const Dupla = Schema({
   nombre:String,
-  descripcion:String
+  descripcion:String,
+  url:String
 });
 
 const PointSchema = new mongoose.Schema({
