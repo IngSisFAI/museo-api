@@ -14,6 +14,7 @@ const ciudadCtrl = require('../controllers/ciudad')
 const areaCtrl = require('../controllers/area')
 const acidosCtrl = require('../controllers/acidos')
 const tiposPreparacionCtrl = require('../controllers/tipoPreparacion')
+const coleccionCtrl = require('../controllers/coleccion')
 
 const api = express.Router()
 
@@ -145,5 +146,9 @@ api.get('/acido', acidosCtrl.getAcidos)
 
 //tipos preparacion
 api.get('/tipoPreparacion', tiposPreparacionCtrl.getTiposPreparacion)
+
+
+//acidos
+api.get('/coleccion', coleccionCtrl.getColecciones)
 
 module.exports = api
