@@ -7,7 +7,7 @@ const AreaGeologicaSchema = Schema({
     formacion:String,
     grupo:String,
     subgrupo: String,
-    edad:Number,
+    edad:String,
     periodo: String,
     era:String    
 })
@@ -25,7 +25,7 @@ const Dupla = Schema({
 })
 
 const EjemplarSchema = Schema({
-   tipoEjemplar:{type: String, enum:['encontrado', 'no encontrado']},
+   tipoEjemplar:{type: String, enum:['Encontrado', 'No Encontrado']},
    taxonReino:String,
    taxonFilo:String,
    taxonClase:String,
@@ -33,15 +33,15 @@ const EjemplarSchema = Schema({
    taxonFamilia:String,
    taxonGenero:String,
    taxonEspecie:String,
-   eraGeologica:[AreaGeologicaSchema],
+   eraGeologica:AreaGeologicaSchema,
    ilustracionCompleta:String,
    descripcionIC:String,
-   areaHallazgo:[AreaHallazgoSchema],
-   nroColeccion:String,
-   dimensionLargo:Number,
-   dimensionAlto:Number,
-   peso:Number,
-   alimentacion:String,
+   areaHallazgo:AreaHallazgoSchema,
+   nroColeccion:String, 
+   dimensionLargo:String,
+   dimensionAlto:String,
+   peso:String,
+   alimentacion:String, 
    fechaIngresoColeccion:Date,
    ubicacionMuseo: String,
    fotosEjemplar:[Dupla],
