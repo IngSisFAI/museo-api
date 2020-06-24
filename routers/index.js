@@ -14,6 +14,7 @@ const ciudadCtrl = require('../controllers/ciudad')
 
 //Gabriel
 const replicaCtrl = require('../controllers/replica')
+const donacionCtrl = require('../controllers/donacion')
 
 const api = express.Router()
 
@@ -32,6 +33,8 @@ api.get('/personaApellido/:personaId', personaCtrl.getPersonaApellido)
 api.get('/personaNombreApellido/:unNombre&:unApellido', personaCtrl.getPersonaNombreApellido)
 api.get('/personaNombreDNI/:unNombre&:unDni', personaCtrl.getPersonaNombreDNI)
 api.get('/personaApellidoDNI/:unApellido&:unDni', personaCtrl.getPersonaApellidoDNI)
+    //--
+api.get('/personasFiltro/:termino', personaCtrl.getPersonasTermino)
 
 // Excavacion
 api.get('/excavacion', excavacionCtrl.getExcavaciones)
@@ -102,6 +105,13 @@ api.get('/ciudadIdProv/:provId', ciudadCtrl.getCiudadIdProv)
 
 //Replicas
 api.post('/replica', replicaCtrl.saveReplica)
+api.get('/replica/:_id', replicaCtrl.getReplica)
+api.get('/replica', replicaCtrl.getReplicas)
+api.put('/replica/:_id', replicaCtrl.updateReplica)
+
+//Donaciones
+api.post('/donacion', donacionCtrl.saveDonacion)
+api.get('/donacion', donacionCtrl.getDonaciones)
 
 
 

@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const MedidasReplica = Schema({
+    unidadDeMedida: String,
     ancho: Number,
     largo: Number,
     alto: Number,
@@ -34,9 +35,11 @@ const ReplicaSchema = Schema({
     edad: Number,
     ubicacion: Ubicacion,
     estado: String,
-    colectores: [{ type: 'ObjectId', ref: 'persona' }],
-    molde: { type: Number, ref: 'molde' },
-    material: String
+    colectores: [{ type: 'ObjectId', ref: 'Persona' }],
+    molde: String, //{ type: Number, ref: 'molde' },
+    material: String,
+    preparador: String,
+    tecnicasUtilizadas: String
 
 })
 

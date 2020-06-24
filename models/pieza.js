@@ -38,7 +38,7 @@ const PiezaSchema = Schema({
     edad: Number,
     ubicacion: Ubicacion,
     estado: String,
-    colectores: [{ type: Number, ref: 'persona' }]
+    colectores: [{ type: Number, ref: 'Persona' }]
 
 })
 
