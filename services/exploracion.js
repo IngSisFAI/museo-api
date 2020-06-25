@@ -29,7 +29,6 @@ getExploracionById = (req, res) => {
 
       servicioArea.getAreaById(exploracion.idArea).then(area => {
         let areaExploracion = {};
-        console.log("************** ", area);
 
         Object.assign(areaExploracion, area._doc);
         exploracionCompleta.areaExploracion = areaExploracion;
