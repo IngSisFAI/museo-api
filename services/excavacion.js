@@ -144,8 +144,9 @@ crearExcavacion = (req, res) => {
 
 modificarAreaExcavacion = (req, res) => {
   Excavacion.findById(req.params.excavacionId).then(excavacion => {
+    let puntoGps;
     if (req.body.puntoGPSExcavacion) {
-      const puntoGps = excavacion.puntoGps;
+      puntoGps = excavacion.puntoGps;
       puntoGps.coordinates = [
         req.body.puntoGPSExcavacion.lat,
         req.body.puntoGPSExcavacion.lng
