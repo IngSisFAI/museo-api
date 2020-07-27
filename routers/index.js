@@ -15,6 +15,7 @@ const areaCtrl = require("../controllers/area");
 const acidosCtrl = require("../controllers/acidos");
 const tiposPreparacionCtrl = require("../controllers/tipoPreparacion");
 const coleccionCtrl = require("../controllers/coleccion");
+const fileCtrl = require("../controllers/files");
 
 const api = express.Router();
 
@@ -206,42 +207,10 @@ api.get("/tipoPreparacion", tiposPreparacionCtrl.getTiposPreparacion);
 api.get("/coleccion", coleccionCtrl.getColecciones);
 
 //archivos
-api.get("/uploadArchivo", coleccionCtrl.uploadArchivo);
+api.post("/uploadArchivo", fileCtrl.uploadFile);
+api.get("/deleteArchivo", fileCtrl.deleteFile);
+api.get("/deleteDirectorio", fileCtrl.deleteDirectory);
 
-// el metodo uploadArchivos dentro del servicio,dentro del controler tiene esto:
 
-// todo esto dentor del metodo "uploadArchivo" del servicio:
-var multer = require("multer");
-
-var storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    var name = req.headers.path;
-    console.log(req.headers.path);
-    console.log(file.originalname);
-    fs.mkdir(name, () => {
-      cb(null, name);
-    });
-  },
-  filename: function(req, file, cb) {
-    cb(null, file.originalname.replace(/\s+/g, "_"));
-  }
-});
-
-var upload = multer({ storage: storage }).array("file");
-
-upload(req, res, function(err) {
-  if (err instanceof multer.MulterError) {
-    return res.status(500).json(err);
-    // A Multer error occurred when uploading.
-  } else if (err) {
-    return res.status(500).json(err);
-    // An unknown error occurred when uploading.
-  }
-
-  return res.status(200).send(req.file);
-  // Everything went fine.
-});
-
-// hasta aca ========================
 
 module.exports = api;
