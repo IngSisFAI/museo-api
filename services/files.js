@@ -11,18 +11,32 @@ uploadFile = (req, res) => {
 	
 	
 var storage = multer.diskStorage({
-  destination: function(req, file, cb) {
+   destination: function(req, file, cb) {
     var name = req.headers.path;
+    
+    
     console.log('Ruta:',req.headers.path);
-   console.log('Archivo: ',file.originalname);
+    console.log('Newfilename:',req.headers.newfilename);
+    console.log('Archivo: ',file.originalname);
+
+
     fs.mkdir(name, () => {
       cb(null, name);
     });
   },
   filename: function(req, file, cb) {
-	var fileUp= file.originalname.replace(/\s+/g, "_");
-    fileUp= reemplazar(fileUp)	
-    cb(null, fileUp);
+       if(req.headers.newfilename==="")
+       {
+	       var fileUp= file.originalname.replace(/\s+/g, "_");
+           fileUp= reemplazar(fileUp)	
+           cb(null, fileUp);
+       }
+       else
+       {   let ext = path.extname(file.originalname); 
+           const fileUp = req.headers.newfilename+ ext;
+           cb(null, fileUp);
+
+       }
   }
 });
 
