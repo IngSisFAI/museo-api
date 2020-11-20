@@ -16,6 +16,7 @@ const acidosCtrl = require("../controllers/acidos");
 const tiposPreparacionCtrl = require("../controllers/tipoPreparacion");
 const coleccionCtrl = require("../controllers/coleccion");
 const fileCtrl = require("../controllers/files");
+const usuarioCtrl = require("../controllers/usuario");
 
 const api = express.Router();
 
@@ -210,6 +211,16 @@ api.get("/coleccion", coleccionCtrl.getColecciones);
 api.post("/uploadArchivo", fileCtrl.uploadFile);
 api.get("/deleteArchivo", fileCtrl.deleteFile);
 api.get("/deleteDirectorio", fileCtrl.deleteDirectory);
+
+
+//usuarios
+api.post("/saveUsuario", usuarioCtrl.saveUsuario);
+api.get("/usuarios", usuarioCtrl.getUsuarios);
+api.get("/validaUsuario", usuarioCtrl.validaUsuario);
+api.get("/existeUsuario", usuarioCtrl.existeUsuario);
+api.delete("/deleteUsuario", usuarioCtrl.deleteUsuario);
+api.get("/getUsuario", usuarioCtrl.getUsuarioId);
+api.put("/editUsuario", usuarioCtrl.updateUsuario);
 
 
 
