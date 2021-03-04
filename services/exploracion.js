@@ -3,13 +3,13 @@ const Excavacion = require("../models/excavacion");
 // const servicioExcavacion = require('./excavacion');
 const servicioArea = require("./area");
 
-getExcavacionById = excavacionId => {
+getExcavacionById = (excavacionId) => {
   return Excavacion.findById(excavacionId)
-    .then(excavacion => {
+    .then((excavacion) => {
       let excavacionCompleta = {};
       Object.assign(excavacionCompleta, excavacion._doc);
 
-      return servicioArea.getAreaById(excavacion.idArea).then(area => {
+      return servicioArea.getAreaById(excavacion.idArea).then((area) => {
         let areaExcavacion = {};
         Object.assign(areaExcavacion, area._doc);
         excavacionCompleta.areaExcavacion = areaExcavacion;
@@ -17,26 +17,26 @@ getExcavacionById = excavacionId => {
         return excavacionCompleta;
       });
     })
-    .catch(err => Promise.reject(`Error al recuperar la excavacion: ${err}`));
+    .catch((err) => Promise.reject(`Error al recuperar la excavacion: ${err}`));
 };
 
 getExploracionById = (req, res) => {
   return Exploracion.findById(req.params.exploracionId)
-    .then(exploracion => {
+    .then((exploracion) => {
       const exploracionCompleta = {};
 
       Object.assign(exploracionCompleta, exploracion._doc);
 
-      servicioArea.getAreaById(exploracion.idArea).then(area => {
+      servicioArea.getAreaById(exploracion.idArea).then((area) => {
         let areaExploracion = {};
 
         Object.assign(areaExploracion, area._doc);
         exploracionCompleta.areaExploracion = areaExploracion;
 
         const excavacionesCompletas = exploracion.idExcavaciones.map(
-          excavacionId => getExcavacionById(excavacionId)
+          (excavacionId) => getExcavacionById(excavacionId)
         );
-        Promise.all(excavacionesCompletas).then(todas => {
+        Promise.all(excavacionesCompletas).then((todas) => {
           exploracionCompleta.excavaciones = todas;
           res.status(200).send({ exploracion: exploracionCompleta });
         });
@@ -49,12 +49,12 @@ getExploracionById = (req, res) => {
 
 getExploraciones = (req, res) => {
   return Exploracion.find()
-    .then(exploraciones => {
-      const exploracionesCompletas = exploraciones.map(exploracion => {
+    .then((exploraciones) => {
+      const exploracionesCompletas = exploraciones.map((exploracion) => {
         let exploracionCompleta = {};
         Object.assign(exploracionCompleta, exploracion._doc);
 
-        return servicioArea.getAreaById(exploracion.idArea).then(area => {
+        return servicioArea.getAreaById(exploracion.idArea).then((area) => {
           let areaExploracion = {};
           if (area) {
             Object.assign(areaExploracion, area._doc);
@@ -62,16 +62,16 @@ getExploraciones = (req, res) => {
           }
 
           const excavacionesCompletas = exploracion.idExcavaciones.map(
-            excavacionId => getExcavacionById(excavacionId)
+            (excavacionId) => getExcavacionById(excavacionId)
           );
-          return Promise.all(excavacionesCompletas).then(todas => {
+          return Promise.all(excavacionesCompletas).then((todas) => {
             exploracionCompleta.excavaciones = todas;
             return exploracionCompleta;
           });
         });
       });
 
-      Promise.all(exploracionesCompletas).then(exploraciones => {
+      Promise.all(exploracionesCompletas).then((exploraciones) => {
         res.status(200).send({ exploraciones });
       });
     })
@@ -80,13 +80,13 @@ getExploraciones = (req, res) => {
     );
 };
 
-getExploracion = exploracionId => {
+getExploracion = (exploracionId) => {
   return Exploracion.findById(exploracionId)
-    .then(exploracion => {
+    .then((exploracion) => {
       const exploracionCompleta = {};
       Object.assign(exploracionCompleta, exploracion._doc);
 
-      return servicioArea.getAreaById(exploracion.idArea).then(area => {
+      return servicioArea.getAreaById(exploracion.idArea).then((area) => {
         let areaExploracion = {};
         Object.assign(areaExploracion, area._doc);
         exploracionCompleta.areaExploracion = areaExploracion;
@@ -94,13 +94,15 @@ getExploracion = exploracionId => {
         return exploracionCompleta;
       });
     })
-    .catch(err => Promise.reject(`Error al recuperar la exploracion: ${err}`));
+    .catch((err) =>
+      Promise.reject(`Error al recuperar la exploracion: ${err}`)
+    );
 };
 
 crearAreaExploracion = ({ puntos, nombre }) => {
   return servicioArea
     .crearArea({ puntos, nombre })
-    .then(area => {
+    .then((area) => {
       return { areaId: area._id };
     })
     .catch(
@@ -113,15 +115,15 @@ crearAreaExploracion = ({ puntos, nombre }) => {
 
 modificarAreaExploracion = (req, res) => {
   if (req.body.areaExploracion && req.params.exploracionId) {
-    return getExploracion(req.params.exploracionId).then(exploracion => {
+    return getExploracion(req.params.exploracionId).then((exploracion) => {
       return servicioArea
         .getAreaById(exploracion.idArea)
-        .then(areaExploracion => {
+        .then((areaExploracion) => {
           servicioArea
             .modificarArea(areaExploracion._id, req.body.areaExploracion)
             .then(() =>
               res.status(200).send({
-                message: "Area de Exploracion correctamente modificada"
+                message: "Area de Exploracion correctamente modificada",
               })
             )
             .catch(() =>
@@ -130,7 +132,7 @@ modificarAreaExploracion = (req, res) => {
                 .send({ message: "Error al modificar el Area de Exploracion" })
             );
         })
-        .catch(error => Promise.reject(error));
+        .catch((error) => Promise.reject(error));
     });
   }
   return Promise.resolve();
@@ -155,5 +157,5 @@ module.exports = {
   getExploracion,
   modificarAreaExploracion,
   setearExcavacion,
-  borrarExploraciones
+  borrarExploraciones,
 };

@@ -1,5 +1,7 @@
 "use strict";
 const Excavacion = require("../models/excavacion");
+const Exploracion = require("../models/exploracion");
+
 const servicioExcavacion = require("../services/excavacion");
 
 // busca una excavacion por su ID - clave mongo
@@ -39,7 +41,8 @@ function getExcavacionesHome(req, res) {
       return res
         .status(404)
         .send({ message: `La excavacionHome no existe buscada` });
-    res.status(200).send({ excavacion: excavacion });
+
+    res.status(200).send({ excavacion });
   });
 }
 
@@ -52,7 +55,7 @@ function getExcavacionesDirector(req, res) {
         .send({ message: `Error al realizar la petición: ${err}` });
     if (!excavaciones)
       return res.status(404).send({
-        message: `No existen excavaciones con el Director: ... ` + directorId
+        message: `No existen excavaciones con el Director: ... ` + directorId,
       });
     res.status(200).send({ excavaciones: excavaciones });
   });
@@ -68,7 +71,7 @@ function getExcavacionesPaleontologo(req, res) {
     if (!excavaciones)
       return res.status(404).send({
         message:
-          `No existen excavaciones con el Paleontologo: ... ` + paleontologo
+          `No existen excavaciones con el Paleontologo: ... ` + paleontologo,
       });
     res.status(200).send({ excavaciones: excavaciones });
   });
@@ -83,7 +86,7 @@ function getExcavacionesColector(req, res) {
         .send({ message: `Error al realizar la petición: ${err}` });
     if (!excavaciones)
       return res.status(404).send({
-        message: `No existen excavaciones con el Director: ... ` + colector
+        message: `No existen excavaciones con el Director: ... ` + colector,
       });
     res.status(200).send({ excavaciones: excavaciones });
   });
@@ -91,7 +94,6 @@ function getExcavacionesColector(req, res) {
 
 function saveExcavacion(req, res) {
   console.log("POST /api/excavacion");
-  console.log(req.body);
 
   let excavacion = new Excavacion();
   excavacion.nombre = req.body.nombre;
@@ -116,10 +118,32 @@ function saveExcavacion(req, res) {
   excavacion.muestraHome = req.body.muestraHome;
 
   excavacion.save((err, excavacionStored) => {
-    if (err)
-      res
+    if (err) {
+      return res
         .status(500)
         .send({ message: `Error al salvar en la Base de Datos:${err}` });
+    }
+
+    Exploracion.findById(excavacion.idExploracion)
+      .then((exploracion) => {
+        return Exploracion.update(
+          { _id: exploracion._id },
+          {
+            $set: {
+              idExcavaciones: [
+                ...exploracion.idExcavaciones,
+                excavacionStored._id,
+              ],
+            },
+          }
+        );
+      })
+      .catch(() =>
+        res
+          .status(500)
+          .send({ message: `Error al salvar en la Base de Datos:${err}` })
+      );
+
     res.status(200).send({ excavacion: excavacionStored });
   });
 }
@@ -196,7 +220,7 @@ function deleteExcavacion(req, res) {
     // You can really do this however you want, though.
     const response = {
       message: "Excavacion satisfactoriamente borrada",
-      id: excavacion._id
+      id: excavacion._id,
     };
     return res.status(200).send(response);
   });
@@ -303,5 +327,5 @@ module.exports = {
   borrarExcavaciones,
   getExcavacionesFiltroName,
   updateExcavacionBochones,
-  getExcavacionPorIdFoto
+  getExcavacionPorIdFoto,
 };

@@ -1,16 +1,16 @@
 const Area = require("../models/area");
 
-getAreaById = idArea => Area.findById(idArea);
+getAreaById = (idArea) => Area.findById(idArea);
 
-crearArea = areaData => {
+crearArea = (areaData) => {
   const coordinates = [];
-  areaData.puntos.forEach(punto => {
+  areaData.puntos.forEach((punto) => {
     coordinates.push([punto.lat, punto.lng]);
   });
   coordinates.push([areaData.puntos[0].lat, areaData.puntos[0].lng]);
   const locacion = {
     type: "Polygon",
-    coordinates: [coordinates]
+    coordinates: [coordinates],
   };
 
   const area = new Area({
@@ -18,7 +18,7 @@ crearArea = areaData => {
     idCiudad: 14, // Neuquen - podriamos agregarlo al form
     idProvincia: 14, // Neuquen - podriamos agregarlo al form
     idPais: 1, // Argetina
-    locacion
+    locacion,
   });
 
   return area.save();
@@ -26,7 +26,7 @@ crearArea = areaData => {
 
 modificarArea = (idArea, nuevaArea) => {
   const locacion = {
-    coordinates: [nuevaArea.map(c => [c.lat, c.lng])]
+    coordinates: [nuevaArea.map((c) => [c.lat, c.lng])],
   };
   return Area.update({ _id: idArea }, { $set: { locacion } });
 };
@@ -57,5 +57,5 @@ module.exports = {
   crearArea,
   modificarArea,
   eliminarArea,
-  getAreas
+  getAreas,
 };

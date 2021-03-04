@@ -7,20 +7,20 @@ getExcavacion = (req, res) => {
   let excavacionCompleta = {};
 
   return Excavacion.findById(excavacionId)
-    .then(excavacion => {
+    .then((excavacion) => {
       Object.assign(excavacionCompleta, excavacion._doc);
 
       servicioArea
         .getAreaById(excavacion.idArea)
-        .then(area => {
+        .then((area) => {
           excavacionCompleta.areaExcavacion = area;
 
           servicioExploracion
             .getExploracionById(excavacion.idExploracion)
-            .then(exploracion => {
+            .then((exploracion) => {
               excavacionCompleta.exploracion = exploracion;
 
-              servicioArea.getAreaById(exploracion.idArea).then(area => {
+              servicioArea.getAreaById(exploracion.idArea).then((area) => {
                 let areaExploracion = {};
                 Object.assign(areaExploracion, area._doc);
                 excavacionCompleta.areaExploracion = areaExploracion;
@@ -29,39 +29,38 @@ getExcavacion = (req, res) => {
               });
             });
         })
-        .catch(err =>
+        .catch((err) =>
           res
             .status(500)
             .send({ message: `Error al realizar la petición: ${err}` })
         );
     })
-    .catch(err =>
+    .catch((err) =>
       res.status(500).send({ message: `Error al realizar la petición` })
     );
 };
 
 getExcavaciones = (req, res) => {
   return Excavacion.find()
-    .then(excavaciones => {
-      const excavacionesCompletas = excavaciones.map(excavacion => {
+    .then((excavaciones) => {
+      const excavacionesCompletas = excavaciones.map((excavacion) => {
         let excavacionCompleta = {};
         Object.assign(excavacionCompleta, excavacion._doc);
 
-        return servicioArea.getAreaById(excavacion.idArea).then(area => {
+        return servicioArea.getAreaById(excavacion.idArea).then((area) => {
           excavacionCompleta.areaExcavacion = area;
 
           return servicioExploracion
             .getExploracion(excavacion.idExploracion)
-            .then(exploracion => {
+            .then((exploracion) => {
               if (exploracion) {
                 excavacionCompleta.exploracion = exploracion;
 
                 return servicioArea
                   .getAreaById(exploracion.idArea)
-                  .then(area => {
+                  .then((area) => {
                     let areaExploracion = {};
                     Object.assign(areaExploracion, area._doc);
-                    excavacionCompleta.areaExploracion = areaExploracion;
 
                     return excavacionCompleta;
                   });
@@ -70,8 +69,10 @@ getExcavaciones = (req, res) => {
         });
       });
 
-      Promise.all(excavacionesCompletas).then(todasExcavaciones => {
-        todasExcavaciones = todasExcavaciones.filter(exc => exc !== undefined);
+      Promise.all(excavacionesCompletas).then((todasExcavaciones) => {
+        todasExcavaciones = todasExcavaciones.filter(
+          (exc) => exc !== undefined
+        );
         res.status(200).send({ excavaciones: todasExcavaciones });
       });
     })
@@ -85,18 +86,18 @@ getAreaExcavacion = (req, res) => {
   let excavacionCompleta = {};
 
   return Excavacion.findById(excavacionId)
-    .then(excavacion => {
+    .then((excavacion) => {
       Object.assign(excavacionCompleta, excavacion._doc);
 
-      servicioArea.getAreaById(excavacion.idArea).then(area => {
+      servicioArea.getAreaById(excavacion.idArea).then((area) => {
         excavacionCompleta.areaExcavacion = area;
 
         servicioExploracion
           .getExploracion(excavacion.idExploracion)
-          .then(exploracion => {
+          .then((exploracion) => {
             excavacionCompleta.exploracion = exploracion;
 
-            servicioArea.getAreaById(exploracion.idArea).then(area => {
+            servicioArea.getAreaById(exploracion.idArea).then((area) => {
               let areaExploracion = {};
               Object.assign(areaExploracion, area._doc);
               excavacionCompleta.areaExploracion = areaExploracion;
@@ -119,17 +120,17 @@ crearExcavacion = (req, res) => {
   // crear el area
   return servicioArea
     .crearArea({ puntos: req.body.areaExcavacion })
-    .then(area => {
+    .then((area) => {
       // crear el area de la excavacion
       const { puntoGPSExcavacion } = req.body;
       const puntoGPS = {
         type: "Point",
-        coordinates: [puntoGPSExcavacion.lat, puntoGPSExcavacion.lng]
+        coordinates: [puntoGPSExcavacion.lat, puntoGPSExcavacion.lng],
       };
 
       return res.status(200).send({
         areaId: area._id,
-        puntoGps: puntoGPS
+        puntoGps: puntoGPS,
       });
 
       // return excavacion
@@ -143,18 +144,18 @@ crearExcavacion = (req, res) => {
 };
 
 modificarAreaExcavacion = (req, res) => {
-  Excavacion.findById(req.params.excavacionId).then(excavacion => {
+  Excavacion.findById(req.params.excavacionId).then((excavacion) => {
     let puntoGps;
     if (req.body.puntoGPSExcavacion) {
       puntoGps = excavacion.puntoGps;
       puntoGps.coordinates = [
         req.body.puntoGPSExcavacion.lat,
-        req.body.puntoGPSExcavacion.lng
+        req.body.puntoGPSExcavacion.lng,
       ];
       Excavacion.update({ _id: excavacion._id }, { $set: { puntoGps } }).catch(
         () =>
           res.status(500).send({
-            message: "Error al modificar el puntoGPS del Area de Excavacion"
+            message: "Error al modificar el puntoGPS del Area de Excavacion",
           })
       );
     }
@@ -162,12 +163,12 @@ modificarAreaExcavacion = (req, res) => {
     if (req.body.areaExcavacion) {
       return servicioArea
         .getAreaById(excavacion.idArea)
-        .then(areaExcavacion => {
+        .then((areaExcavacion) => {
           return servicioArea
             .modificarArea(areaExcavacion._id, req.body.areaExcavacion)
             .then(() =>
               res.status(200).send({
-                message: "Area de Excavacion correctamente modificada"
+                message: "Area de Excavacion correctamente modificada",
               })
             )
             .catch(() =>
@@ -176,7 +177,7 @@ modificarAreaExcavacion = (req, res) => {
                 .send({ message: "Error al modificar el Area de Excavacion" })
             );
         })
-        .catch(error => Promise.reject(error));
+        .catch((error) => Promise.reject(error));
     }
     return res.status(200).send({ puntoGps, idArea: excavacion.idArea });
   });
@@ -187,7 +188,7 @@ borrarExcavaciones = (req, res) => {
     .then(() =>
       res.status(200).send({ message: `Las excavaciones han sido eliminadas` })
     )
-    .catch(err =>
+    .catch((err) =>
       res.status(500).send({ message: `Error al borrar la excavacion: ${err}` })
     );
 };
@@ -199,5 +200,5 @@ module.exports = {
   getExcavaciones,
   modificarAreaExcavacion,
   borrarExcavaciones,
-  getAreaExcavacion
+  getAreaExcavacion,
 };
