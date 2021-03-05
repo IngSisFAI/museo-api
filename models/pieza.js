@@ -3,31 +3,12 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const MedidasPiezaSchema = Schema({
-    ancho: Number,
-    largo: Number,
-    alto: Number,
-    diametro: Number,
-    circunferencia: Number
-})
-
-
-const Dupla = Schema({
-    nombre: String,
-    descripcion: String
-})
-
-const Ubicacion = Schema({
-    codRepositorio: Number,
-    numEstante: Number,
-    numEstanteria: Number
-})
-
 const PiezaSchema = Schema({
-    identificador: String,
+    numeroDePieza: String,
+    nroColeccion: { type: String, ref: 'Ejemplar' },
     tipoPieza: String,
-    medidasPieza: MedidasPiezaSchema,
-    imagenesPieza: [Dupla],
+    medidas: { type: 'ObjecId', ref: 'Dimension' },
+    imagenesPieza: [{ type: 'ObjectId', ref: 'Imangen' }],
     fechaIngreso: Date,
     fechaBaja: Date, //Esto lo paso a la coleccion movimientos
     motivoBaja: String, //Esto lo paso a la coleccion movimiento 
@@ -36,7 +17,7 @@ const PiezaSchema = Schema({
     descripcion: String,
     localidad: String,
     edad: Number,
-    ubicacion: Ubicacion,
+    ubicacion: { type: 'ObjectId', ref: 'UbicacionInterna' },
     estado: String,
     colectores: [{ type: Number, ref: 'Persona' }]
 

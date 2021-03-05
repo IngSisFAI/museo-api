@@ -3,39 +3,18 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const MedidasReplica = Schema({
-    unidadDeMedida: String,
-    ancho: Number,
-    largo: Number,
-    alto: Number,
-    diametro: Number,
-    circunferencia: Number
-})
-
-
-const Dupla = Schema({
-    nombre: String,
-    descripcion: String
-})
-
-const Ubicacion = Schema({
-    codRepositorio: Number,
-    numEstante: Number,
-    numEstanteria: Number
-})
-
 const ReplicaSchema = Schema({
-    codigo: String,
-    medidasReplica: MedidasReplica,
-    imagenesReplica: [Dupla],
+    codigo: String, //nro de replica
+    numeroDePieza: { type: String, ref: 'Pieza' },
+    medidas: { type: 'ObjectId', ref: 'Dimension' },
+    imagenesReplica: [{ type: 'ObjectId', ref: 'Imangen' }],
     fechaIngreso: Date,
     origen: { type: String, enum: ['Fabricado', 'Donación', 'Préstamo', 'Canje'] },
     descripcion: String,
-    localidad: String,
     edad: Number,
-    ubicacion: Ubicacion,
+    ubicacion: { type: 'ObjectId', ref: 'UbicacionInterna' },
     estado: String,
-    colectores: [{ type: 'ObjectId', ref: 'Persona' }],
+    colectores: [{ type: 'ObjectId', ref: 'Persona' }], //sacar por que no corresponde
     molde: String, //{ type: Number, ref: 'molde' },
     material: String,
     preparador: String,

@@ -1,18 +1,20 @@
 'use strict'
 
 const mongoose = require('mongoose')
-const Schema  = mongoose.Schema
+const Schema = mongoose.Schema
 
 const PersonaSchema = Schema({
-    nombres:String,
+    nombres: String,
     apellidos: String,
-    dni: Number,//numero plano sin puntos
+    dni: Number, //numero plano sin puntos
     fechaInicio: Date,
-    titulos:[String],
+    titulos: [String],
     foto: String, // foto de la persona es un archivo.jpg donde se almacenan todas las fotos de les personas
     fechaBaja: Date,
-    motivoBaja:String,
-   
+    motivoBaja: String,
+    telefono: String,
+    email: String
+
 })
 
 module.exports = mongoose.model('Persona', PersonaSchema)
