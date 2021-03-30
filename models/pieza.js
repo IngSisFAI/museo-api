@@ -3,21 +3,30 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
+const DimensionSchema = Schema({
+    unidadDeMedida: { type: String, enum: ['mm', 'cm', 'm', 'pg'] },
+    ancho: Number,
+    largo: Number,
+    alto: Number,
+    diametro: Number,
+    circunferencia: Number
+})
+
 const PiezaSchema = Schema({
     numeroDePieza: String,
-    nroColeccion: { type: String, ref: 'Ejemplar' },
+    nroColeccion: { type: Schema.Types.ObjectId, ref: 'Ejemplar' },
     tipoPieza: String,
-    medidas: { type: 'ObjecId', ref: 'Dimension' },
-    imagenesPieza: [{ type: 'ObjectId', ref: 'Imangen' }],
+    medidas: DimensionSchema,
+    imagenesPieza: [{ type: Schema.Types.ObjectId, ref: 'Imagen' }],
     fechaIngreso: Date,
-    fechaBaja: Date, //Esto lo paso a la coleccion movimientos
-    motivoBaja: String, //Esto lo paso a la coleccion movimiento 
+    fechaBaja: Date, //Esto lo paso a la coleccion bajas
+    motivoBaja: String, //Esto lo paso a la coleccion bajas 
     perteneceEjemplar: String,
-    origen: { type: String, enum: ['ExcavaciónPropia', 'Donación', 'Préstamo', 'Canje'] },
+    origen: { type: String, enum: ['excavación propia', 'donación', 'préstamo', 'canje'] },
     descripcion: String,
     localidad: String,
     edad: Number,
-    ubicacion: { type: 'ObjectId', ref: 'UbicacionInterna' },
+    ubicacion: { type: Schema.Types.ObjectId, ref: 'UbicacionInterna' },
     estado: String,
     colectores: [{ type: Number, ref: 'Persona' }]
 

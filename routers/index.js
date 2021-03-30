@@ -15,6 +15,8 @@ const ciudadCtrl = require('../controllers/ciudad')
 //Gabriel
 const replicaCtrl = require('../controllers/replica')
 const donacionCtrl = require('../controllers/donacion')
+const dimensionCtrl = require('../controllers/dimension');
+const ubicacionInternaCtrl = require('../controllers/ubicacionInterna')
 
 const api = express.Router()
 
@@ -113,6 +115,13 @@ api.put('/replica/:_id', replicaCtrl.updateReplica)
 api.post('/donacion', donacionCtrl.saveDonacion)
 api.get('/donacion', donacionCtrl.getDonaciones)
 
+//Auxiliares
+api.post('/dimension', dimensionCtrl.saveDimension)
+api.put('/dimension/:id', dimensionCtrl.editDimension)
+api.get('/dimension/:id', dimensionCtrl.getDimension)
 
+api.post('/ubicacionInterna', ubicacionInternaCtrl.saveUbicacionInterna)
+api.put('/ubicacionInterna/:id', ubicacionInternaCtrl.editUbicacionInterna)
+api.get('/ubicacionInterna/:id', ubicacionInternaCtrl.getUbicacionInterna)
 
 module.exports = api
