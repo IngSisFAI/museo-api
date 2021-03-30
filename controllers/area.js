@@ -9,13 +9,9 @@ const modificarArea = (req,res) => servicioArea.modificarArea(req, res);
 
 const eliminarArea = (req,res) => servicioArea.eliminarArea(req, res);
 
-const getAreas = (req,res) => servicioArea.getAreas(req, res);
-
 module.exports = {
     crearArea,
     obtenerArea,
     modificarArea,
     eliminarArea,
-	getAreas
 };
- 

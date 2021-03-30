@@ -1,31 +1,35 @@
 'use strict'
 
 const mongoose = require('mongoose')
-const Schema  = mongoose.Schema
+const Schema = mongoose.Schema
 
-const MedidasPiezaSchema = Schema({
-    ancho:Number,
+const DimensionSchema = Schema({
+    unidadDeMedida: { type: String, enum: ['mm', 'cm', 'm', 'pg'] },
+    ancho: Number,
     largo: Number,
     alto: Number,
     diametro: Number,
     circunferencia: Number
 })
 
-const Dupla = Schema({
-    nombre:String,
-    descripcion:String
-})
-
 const PiezaSchema = Schema({
-   identificador: String,
-   tipoPieza: String,
-   medidasPieza:MedidasPiezaSchema,
-   imagenesPieza:[Dupla],
-   fechaIngreso:Date,
-   fechaBaja:Date,
-   motivoBaja:String,
-   perteneceEjemplar: String,
-   origen: {type: String, enum:['ExcavaciónPropia', 'Donación','Préstamo']}
+    numeroDePieza: String,
+    nroColeccion: { type: Schema.Types.ObjectId, ref: 'Ejemplar' },
+    tipoPieza: String,
+    medidas: DimensionSchema,
+    imagenesPieza: [{ type: Schema.Types.ObjectId, ref: 'Imagen' }],
+    fechaIngreso: Date,
+    fechaBaja: Date, //Esto lo paso a la coleccion bajas
+    motivoBaja: String, //Esto lo paso a la coleccion bajas 
+    perteneceEjemplar: String,
+    origen: { type: String, enum: ['excavación propia', 'donación', 'préstamo', 'canje'] },
+    descripcion: String,
+    localidad: String,
+    edad: Number,
+    ubicacion: { type: Schema.Types.ObjectId, ref: 'UbicacionInterna' },
+    estado: String,
+    colectores: [{ type: Number, ref: 'Persona' }]
+
 })
 
 module.exports = mongoose.model('Pieza', PiezaSchema)

@@ -8,7 +8,7 @@ const BochonSchema = Schema({
    nroCampo:Number,
    preparador: String,
    preparadorID: String,
-   tipoPreparacion:{type: String, enum:['Química', 'Mecánica','Técnicas de extracción de microfósiles','Técnicas de concentración', 'Secciones delgadas','Consolidantes y adhesivos']},
+   tipoPreparacion:{type: String, enum:['quimica', 'tipoA','tipoB']},
    acidosAplicados: [String],
    ejemplarAsociado: String,
    excavacionId: String,
