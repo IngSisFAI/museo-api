@@ -13,10 +13,11 @@ const provinciaCtrl = require('../controllers/provincia')
 const ciudadCtrl = require('../controllers/ciudad')
 
 //Gabriel
-const replicaCtrl = require('../controllers/replica')
+const replicaRouter = require('./replica')
+const ubicacionInternaRouter = require('./ubicacionInterna')
 const donacionCtrl = require('../controllers/donacion')
 const dimensionCtrl = require('../controllers/dimension');
-const ubicacionInternaCtrl = require('../controllers/ubicacionInterna')
+//const ubicacionInternaCtrl = require('../controllers/ubicacionInterna')
 
 const api = express.Router()
 
@@ -106,12 +107,12 @@ api.get('/ciudad', ciudadCtrl.getCiudades)
 api.get('/ciudadIdProv/:provId', ciudadCtrl.getCiudadIdProv)
 
 //Replicas
-api.post('/replica', replicaCtrl.saveReplica)
-api.get('/replica/:_id', replicaCtrl.getReplica)
-api.get('/replica', replicaCtrl.getReplicas)
-api.put('/replica/:_id', replicaCtrl.updateReplica)
-
-//Donaciones
+// api.post('/replica', replicaCtrl.saveReplica)
+// api.get('/replica/:_id', replicaCtrl.getReplica)
+// api.get('/replica', replicaCtrl.getReplicas)
+// api.put('/replica/:_id', replicaCtrl.updateReplica)
+api.use('/replica', replicaRouter)
+    //Donaciones
 api.post('/donacion', donacionCtrl.saveDonacion)
 api.get('/donacion', donacionCtrl.getDonaciones)
 
@@ -120,8 +121,12 @@ api.post('/dimension', dimensionCtrl.saveDimension)
 api.put('/dimension/:id', dimensionCtrl.editDimension)
 api.get('/dimension/:id', dimensionCtrl.getDimension)
 
-api.post('/ubicacionInterna', ubicacionInternaCtrl.saveUbicacionInterna)
-api.put('/ubicacionInterna/:id', ubicacionInternaCtrl.editUbicacionInterna)
-api.get('/ubicacionInterna/:id', ubicacionInternaCtrl.getUbicacionInterna)
+// api.post('/ubicacionInterna', ubicacionInternaCtrl.saveUbicacionInterna)
+// api.put('/ubicacionInterna/:id', ubicacionInternaCtrl.editUbicacionInterna)
+// api.get('/ubicacionInterna/:id', ubicacionInternaCtrl.getUbicacionInterna)
+api.use('/ubicacionInterna', ubicacionInternaRouter)
+
+
+
 
 module.exports = api

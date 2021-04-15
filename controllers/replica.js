@@ -3,6 +3,7 @@
 const Replica = require('../models/replica')
 const Pieza = require('../models/pieza')
 const Persona = require('../models/persona')
+const crearError = require('http-errors')
 
 function saveReplica(req, res, next) {
 
@@ -83,6 +84,7 @@ function saveReplica(req, res, next) {
 }
 
 function getReplica(req, res) { //Buscar Replica por Codigo
+
     let replicaId = req.params._id
     Replica.findOne({ _id: replicaId }).populate('colectores').exec((err, replica) => {
         if (err) return res.status(500).send({ message: `Error al realizar la petición: ${err}` })
@@ -90,7 +92,7 @@ function getReplica(req, res) { //Buscar Replica por Codigo
         res.status(200).send({ replica: replica })
     })
 }
-
+/** 
 function getReplicas(req, res) { // Retornar todas las replicas de la coleccion
     Replica.find({}, (err, replicas) => {
         if (err) return res.status(500).send({ message: `Error al realizar la petición: ${err}` })
@@ -98,13 +100,34 @@ function getReplicas(req, res) { // Retornar todas las replicas de la coleccion
         res.status(200).send({ replicas: replicas })
     })
 }
+*/
+async function getReplicas(req, res, next) {
+    try {
+        const replicas = await Replica.find({})
+        if (!replicas) throw crearError(400, 'No existe Replicas')
+            //throw crearError(400, 'mensaje de prueba', { hola: 'hola' })
+        res.status(200).send({ replicas })
+    } catch (err) {
+        next(err)
+    }
+}
 
-function updateReplica(req, res) {
+/*function updateReplica(req, res) {
     Replica.findByIdAndUpdate(req.params._id, { $set: req.body }, (err, replicaActulizada) => {
         if (err) return res.status(500).send({ message: `Error al realizar la actualizacion: ${err}` })
         if (!replicaActulizada) return res.status(404).send({ message: `No se encontro la replica` })
         res.status(200).send({ replicaActulizada })
     })
+}*/
+
+async function updateReplica(req, res, next) {
+    try {
+        const replica = await Replica.findByIdAndUpdate(req.params._id, { $set: req.body })
+        if (!replica) throw crearError(404, 'No se encontro la replica')
+        res.status(200).send({ replica })
+    } catch (err) {
+        next(err);
+    }
 }
 
 

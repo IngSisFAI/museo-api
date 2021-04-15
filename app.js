@@ -35,10 +35,22 @@ app.use(function(req, res, next) {
 
 app.use('/api', api)
 
+
 //ruta de prueba para subir archivos
 app.post('/subir', upload.single('archivo'), (req, res) => {
     console.log(req.file);
     res.send('Archivos se subieron correctamente')
 })
+
+app.use(errorHandler);
+
+function errorHandler(err, req, res, next) {
+    res.status(err.status || 500)
+    res.json({
+        status: err.status,
+        message: err.message,
+        stack: err.stack
+    })
+}
 
 module.exports = app
