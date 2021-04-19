@@ -15,6 +15,8 @@ const ciudadCtrl = require('../controllers/ciudad')
 //Gabriel
 const replicaRouter = require('./replica')
 const ubicacionInternaRouter = require('./ubicacionInterna')
+const moldeRouter = require('./molde')
+const institucionRouter = require('./institucion')
 const donacionCtrl = require('../controllers/donacion')
 const dimensionCtrl = require('../controllers/dimension');
 //const ubicacionInternaCtrl = require('../controllers/ubicacionInterna')
@@ -107,10 +109,6 @@ api.get('/ciudad', ciudadCtrl.getCiudades)
 api.get('/ciudadIdProv/:provId', ciudadCtrl.getCiudadIdProv)
 
 //Replicas
-// api.post('/replica', replicaCtrl.saveReplica)
-// api.get('/replica/:_id', replicaCtrl.getReplica)
-// api.get('/replica', replicaCtrl.getReplicas)
-// api.put('/replica/:_id', replicaCtrl.updateReplica)
 api.use('/replica', replicaRouter)
     //Donaciones
 api.post('/donacion', donacionCtrl.saveDonacion)
@@ -121,11 +119,10 @@ api.post('/dimension', dimensionCtrl.saveDimension)
 api.put('/dimension/:id', dimensionCtrl.editDimension)
 api.get('/dimension/:id', dimensionCtrl.getDimension)
 
-// api.post('/ubicacionInterna', ubicacionInternaCtrl.saveUbicacionInterna)
-// api.put('/ubicacionInterna/:id', ubicacionInternaCtrl.editUbicacionInterna)
-// api.get('/ubicacionInterna/:id', ubicacionInternaCtrl.getUbicacionInterna)
-api.use('/ubicacionInterna', ubicacionInternaRouter)
 
+api.use('/ubicacionInterna', ubicacionInternaRouter)
+api.use('/molde', moldeRouter)
+api.use('/institucion', institucionRouter)
 
 
 

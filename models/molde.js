@@ -14,11 +14,10 @@ const DimensionSchema = Schema({
 
 const MoldeSchema = Schema({
     material: String,
-    ubicacion: { type: 'ObjectId', ref: 'UbicacionInterna' },
+    ubicacion: { type: Schema.Types.ObjectId, ref: 'UbicacionInterna' },
     descripcion: String,
     medidas: DimensionSchema
 
 })
-
 
 module.exports = mongoose.model('Molde', MoldeSchema)

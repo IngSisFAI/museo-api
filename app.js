@@ -42,6 +42,7 @@ app.post('/subir', upload.single('archivo'), (req, res) => {
     res.send('Archivos se subieron correctamente')
 })
 
+//Manejador de errores
 app.use(errorHandler);
 
 function errorHandler(err, req, res, next) {

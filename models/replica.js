@@ -14,14 +14,14 @@ const DimensionSchema = Schema({
 
 const ReplicaSchema = Schema({
     codigo: String, //nro de replica
-    numeroDePieza: { type: String, ref: 'Pieza' },
+    numeroDePieza: { type: Schema.Types.ObjectId, ref: 'Pieza' },
     medidas: DimensionSchema,
     imagenesReplica: [{ type: Schema.Types.ObjectId, ref: 'Imagen' }],
     fechaIngreso: Date,
     origen: { type: String, enum: ['Fabricado', 'Donación', 'Préstamo', 'Canje'] },
     descripcion: String,
     edad: Number,
-    ubicacion: { type: Schema.Types.ObjectId, ref: 'UbicacionInterna' },
+    ubicacionInterna: { type: Schema.Types.ObjectId, ref: 'UbicacionInterna' },
     estado: String,
     preparadores: [{ type: 'ObjectId', ref: 'Persona' }], //sacar por que no corresponde
     molde: { type: Schema.Types.ObjectId, ref: 'Molde' }, //{ type: Number, ref: 'molde' },

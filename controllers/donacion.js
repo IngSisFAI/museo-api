@@ -1,7 +1,6 @@
-'use strict'
-
 const Donacion = require('../models/donacion')
 const DetalleDonacion = require('../models/detalleDonacion')
+const crearError = require('http-errors')
 
 function saveDonacion(req, res) {
 
@@ -33,12 +32,14 @@ function saveDonacion(req, res) {
     res.status(200).send({ donacion })
 }
 
-function getDonaciones(req, res) {
-    Donacion.find().populate('actorP').exec((err, donaciones) => {
-        if (err) return res.status(500).send({ message: `Error al realizar la petición: ${err}` })
-        if (!donaciones) return res.status(404).send({ message: `No existen Donaciones` })
-        res.status(200).send({ donaciones })
-    })
+async function getDonaciones(req, res, next) {
+    try {
+        const donaciones = await Donacion.find().populate('elementoR').populate('elementoP').populate('actorP').populate('actorI')
+        if (!donaciones) throw new crearError(400, 'No existen donaciones')
+        res.status(200).send(donaciones);
+    } catch (err) {
+        next(err)
+    }
 }
 
 module.exports = {
