@@ -4,8 +4,9 @@ var fs = require("fs");
 const http = require('http');
 const url = require('url');
 const path = require('path');
+const jwt = require("jsonwebtoken");
 
-
+//************************************************************************
 //************************ Subir archivo *********************************
 uploadFile = (req, res) => {
 //console.log('Llega:', req.headers.newfilename);
@@ -30,7 +31,7 @@ var storage = multer.diskStorage({
   filename: function(req, file, cb) {
        if(req.headers.newfilename==="")
        {
-	       var fileUp= file.originalname.replace(/\s+/g, "_");
+	   var fileUp= file.originalname.replace(/\s+/g, "_");
            fileUp= reemplazar(fileUp)	
            cb(null, fileUp);
        }
@@ -69,19 +70,26 @@ function reemplazar(cadena)
 }
 
 var upload = multer({ storage: storage }).array("file");
+   jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+            if(error){
+                  res.status(403).send({msg:'Acceso no permitido'});
+              }else{
+                      upload(req, res, function(err) {
+                        if (err instanceof multer.MulterError) {
+                                  return res.status(500).json(err);
+                                  // A Multer error occurred when uploading.
+                         } else if (err) {
+                             return res.status(500).json(err);
+                              // An unknown error occurred when uploading.
+                        }
 
-upload(req, res, function(err) {
-  if (err instanceof multer.MulterError) {
-    return res.status(500).json(err);
-    // A Multer error occurred when uploading.
-  } else if (err) {
-    return res.status(500).json(err);
-    // An unknown error occurred when uploading.
-  }
+                     return res.status(200).send(req.file);
+                     // Everything went fine.
+                 });
 
-  return res.status(200).send(req.file);
-  // Everything went fine.
-});
+
+              }
+   });
 
 }
 
@@ -92,24 +100,35 @@ deleteFile = (req, res) => {
 let pathname=req.headers.path;
 
 console.log(pathname);
+//console.log(req.token);
 
-var curPath = pathname;
-fs.unlink(curPath, function (err) {
-   if(err == null)
-   {
-      console.log('Archivo Borrado.');
-      return res.status(200).send({'msg':'OK'});
+ jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+              if(error){
+                  res.status(403).send({msg:'Acceso no permitido'});
+              }else{
+                            var curPath = pathname;
+                            fs.unlink(curPath, function (err) {
+                                if(err == null)
+                                {
+                                      console.log('Archivo Borrado.');
+                                      return res.status(200).send({'msg':'OK'});
                   
-   } else if(err.code == 'ENOENT') {
-                console.log('No Existe Archivo', err.code);
-                return res.status(200).send({'msg':'ERROR'});
+                                 } else if(err.code == 'ENOENT') {
+                 		 		console.log('No Existe Archivo', err.code);
+                				return res.status(200).send({'msg':'ERROR'});
 				
-          } else {
-                         console.log('Some other error: ', err.code);
+          			   } else {
+                         			console.log('Some other error: ', err.code);
 						// return res.status(500).send('Some other error');
-                         return res.status(200).send({'msg':'ERROR'});
-                 }
+                           			return res.status(200).send({'msg':'ERROR No Existe Archivo'});
+                 			  }
+                                
+                             });   
+                   
+			
+                  } 
 });   
+
 
   
 }	
