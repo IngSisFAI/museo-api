@@ -4,7 +4,7 @@ const Schema  = mongoose.Schema;
 
 
 const DocumentacionSchema = Schema({
- tipoDocumentacion: String,
+ tipoDocumentacion: {type: String, enum:['Nota Enviada', 'Nota Recibida']},
  nombre: String,
  anio: Number,
  comentarios:String});

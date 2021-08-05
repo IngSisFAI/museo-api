@@ -2,77 +2,119 @@
 const servicioExploracion = require("../services/exploracion");
 const Exploracion = require("../models/exploracion");
 const servicioArea = require("../services/area");
+const jwt = require("jsonwebtoken");
 
 function saveExploracion(req, res) {
   console.log("POST /api/exploracion");
   console.log(req.body);
 
-  let exploracion = new Exploracion();
-  exploracion.nombre = req.body.nombre;
-  exploracion.fecha = req.body.fecha;
-  exploracion.idArea = req.body.areaId;
+  jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+    if (error) {
+      res.status(403).send({ msg: 'Acceso no permitido' });
+    } else {
 
-  exploracion.save((err, exploracionStored) => {
-    if (err)
-      res
-        .status(500)
-        .send({ message: `Error al salvar en la Base de Datos:${err}` });
-    res.status(200).send({ exploracion: exploracionStored });
+      let exploracion = new Exploracion();
+      exploracion.nombreArea = req.body.nombreArea;
+      exploracion.fechaInicio = req.body.fechaInicio;
+      exploracion.fechaTermino = req.body.fechaTermino;
+      exploracion.directorId = req.body.directorId;
+      exploracion.integrantesGrupo = req.body.integrantesGrupo;
+      exploracion.idArea = req.body.idArea;
+      exploracion.empresa = req.body.empresa;
+      exploracion.proyectoInvestigacion = req.body.proyectoInvestigacion;
+      exploracion.otrasEspecificaciones = req.body.otrasEspecificaciones;
+      exploracion.archAutorizaciones = req.body.archAutorizaciones;
+      exploracion.detallePicking = req.body.detallePicking;
+      exploracion.imagenesExploracion = req.body.imagenesExploracion;
+
+
+
+      exploracion.save((err, exploracionStored) => {
+        if (err) res.status(500).send({ message: `Error al salvar en la Base de Datos:${err}` });
+        res.json({ exploracion: exploracionStored });
+      });
+    }
   });
 }
 
 function getExploracionId(req, res) {
-  // busca una persona por su ID - clave mongo
   let exploracionId = req.params.exploracionId;
-  Exploracion.findById(exploracionId, (err, exploracionId) => {
-    if (err)
-      return res
-        .status(500)
-        .send({ message: `Error al realizar la petición: ${err}` });
-    if (!exploracionId)
-      return res.status(404).send({ message: `La exploracion no existe` });
-    res.status(200).send({ exploracionId: exploracionId });
+
+  jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+    if (error) {
+      res.status(403).send({ msg: 'Acceso no permitido' });
+    } else {
+
+      Exploracion.findById(exploracionId, (err, exploracionId) => {
+        if (err)
+          return res
+            .status(500)
+            .send({ message: `Error al realizar la petición: ${err}` });
+        if (!exploracionId)
+          return res.status(404).send({ message: `La exploracion no existe` });
+        res.status(200).send({ exploracionId: exploracionId });
+      });
+
+
+    }
   });
+
 }
 
 function updateExploracion(req, res) {
   let exploracionId = req.params.exploracionId;
   let update = req.body;
   console.log(
-    "POST /api/persona/:PersonaId UpdatePersona......",
+    "POST /api/exploracion/:ExploracionId UpdateExploracion......",
     req.params.exploracionId
   );
   console.log(req.body);
 
-  Exploracion.findByIdAndUpdate(
-    exploracionId,
-    update,
-    (err, exploracionUpdate) => {
-      if (err)
-        return res
-          .status(500)
-          .send({ message: `Error al tratar de actualizar: ${err}` });
-      if (!exploracionUpdate)
-        return res.status(404).send({ message: `La persona Update no Existe` });
-      res.status(200).send({ exploracion: exploracionUpdate });
+  jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+    if (error) {
+      res.status(403).send({ msg: 'Acceso no permitido' });
+    } else {
+      Exploracion.findByIdAndUpdate(
+        exploracionId,
+        update,
+        (err, exploracionUpdate) => {
+          if (err)
+            return res
+              .status(500)
+              .send({ message: `Error al tratar de actualizar: ${err}` });
+          if (!exploracionUpdate)
+            return res.status(404).send({ message: `La persona Update no Existe` });
+          res.status(200).send({ exploracion: exploracionUpdate });
+        }
+      );
+
     }
-  );
+  });
+
+
 }
 
 function deleteExploracion(req, res) {
   let exploracionId = req.params.exploracionId;
 
-  Exploracion.findByIdAndRemove(exploracionId, (err, exploracion) => {
-    // As always, handle any potential errors:
-    if (err) return res.status(500).send(err);
-    // We'll create a simple object to send back with a message and the id of the document that was removed
-    // You can really do this however you want, though.
-    const response = {
-      message: "Exploracion satisfactoriamente borrada",
-      id: exploracion._id
-    };
-    return res.status(200).send(response);
-  });
+jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+    if (error) {
+      res.status(403).send({ msg: 'Acceso no permitido' });
+    } else {
+
+  	Exploracion.findByIdAndRemove(exploracionId, (err, exploracion) => {
+    		// As always, handle any potential errors:
+    		if (err) return res.status(500).send(err);
+    		// We'll create a simple object to send back with a message and the id of the document that was removed
+    		// You can really do this however you want, though.
+    		const response = {
+      			message: "Exploracion satisfactoriamente borrada",
+      			id: exploracion._id
+    			};
+   			 return res.status(200).send(response);
+  	});
+     }
+});
 }
 
 function getExploracionesFiltro(req, res) {

@@ -24,34 +24,35 @@ const api = express.Router();
 //api.get("/info", homeCtrl.getHome); // obtiene todos los datos del Home unico documento
 //api.get("/obtenerArchivos");
 
-
+//Personas
 api.get("/personas", verifyToken, personaCtrl.getPersonas);
 api.delete("/persona/:personaId", verifyToken, personaCtrl.deletePersona); 
 api.get("/personaDni/:personaId", verifyToken, personaCtrl.getPersonaDni);
 api.post("/persona", verifyToken, personaCtrl.savePersona);
 api.put("/persona/:personaId", verifyToken, personaCtrl.updatePersona);
+api.get("/personaId/:personaId", verifyToken, personaCtrl.getPersonaId);
 
 
-api.get("/personaId/:personaId", personaCtrl.getPersonaId);
+//Exploracion
+api.get("/exploracion", verifyToken, exploracionCtrl.getExploraciones);
+api.post("/exploracion", verifyToken, exploracionCtrl.saveExploracion);
+api.get("/exploracionId/:exploracionId", verifyToken, exploracionCtrl.getExploracionId);
+api.put("/exploracion/:exploracionId", verifyToken, exploracionCtrl.updateExploracion); 
+api.delete("/exploracion/:exploracionId",verifyToken, exploracionCtrl.deleteExploracion);
+
+//archivos
+api.post("/uploadArchivo", verifyToken, fileCtrl.uploadFile);
+api.get("/deleteArchivo", verifyToken, fileCtrl.deleteFile);
+api.get("/deleteDirectorio", verifyToken,fileCtrl.deleteDirectory);
+
+
+//Documentacion
+api.get("/documentacion", verifyToken,documentacionCtrl.getDocumentacion);
+api.post("/saveDocumentacion", verifyToken,documentacionCtrl.saveDocumentacion);
+
+
 
  
-// no se usa las siguientes rutas de persona..
-api.get(
-  "/personasFiltro/:unDni&:unNombre&:unApellido",
-  personaCtrl.getPersonasFiltro
-);
-api.get("/personaName/:personaId", personaCtrl.getPersonaName);
-api.get("/personaApellido/:personaId", personaCtrl.getPersonaApellido);
-api.get(
-  "/personaNombreApellido/:unNombre&:unApellido",
-  personaCtrl.getPersonaNombreApellido
-);
-api.get("/personaNombreDNI/:unNombre&:unDni", personaCtrl.getPersonaNombreDNI);
-api.get(
-  "/personaApellidoDNI/:unApellido&:unDni",
-  personaCtrl.getPersonaApellidoDNI
-);
-api.get("/personaNroDoc/:personaId", personaCtrl.getPersonaNroDoc);
 
 // Excavacion
 api.get("/excavacion", excavacionCtrl.getExcavaciones);
@@ -134,6 +135,7 @@ api.get("/ejemplarPorFoto/:fotoId", ejemplarCtrl.getEjemplarPorIdFoto);
 //api.post('/ejemplar', ejemplarCtrl.saveEjemplar)
 
 // Exploracion
+
 api.get("/areaExploracion/:exploracionId", exploracionCtrl.getExploracionById);
 api.get("/areaExploracion", exploracionCtrl.getExploraciones);
 api.post("/areaExploracion", exploracionCtrl.crearAreaExploracion);
@@ -150,15 +152,13 @@ api.put(
 
 //Exploracion
 
-api.get("/exploracion", exploracionCtrl.getExploraciones);
-api.post("/exploracion", exploracionCtrl.saveExploracion);
-api.get("/exploracionId/:exploracionId", exploracionCtrl.getExploracionId);
+
 api.get(
   "/exploracionesFiltro/:unNombre",
   exploracionCtrl.getExploracionesFiltro
 );
-api.put("/exploracion/:exploracionId", exploracionCtrl.updateExploracion); // actualiza un producto
-api.delete("/exploracion/:exploracionId", exploracionCtrl.deleteExploracion);
+
+
 
 //pais
 api.get("/pais", paisCtrl.getPaises);
@@ -214,10 +214,6 @@ api.get("/tipoPreparacion", tiposPreparacionCtrl.getTiposPreparacion);
 //acidos
 api.get("/coleccion", coleccionCtrl.getColecciones);
 
-//archivos
-api.post("/uploadArchivo", verifyToken, fileCtrl.uploadFile);
-api.get("/deleteArchivo", verifyToken, fileCtrl.deleteFile);
-api.get("/deleteDirectorio", fileCtrl.deleteDirectory);
 
 
 //usuarios
@@ -229,9 +225,6 @@ api.delete("/deleteUsuario", usuarioCtrl.deleteUsuario);
 api.get("/getUsuario", usuarioCtrl.getUsuarioId);
 api.put("/editUsuario", usuarioCtrl.updateUsuario);
 
-//documentacion
-api.get("/documentacion", documentacionCtrl.getDocumentacion);
-api.post("/saveDocumentacion", documentacionCtrl.saveDocumentacion);
 
 // Authorization: Bearer <token>
 function verifyToken(req, res, next){

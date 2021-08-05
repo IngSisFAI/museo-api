@@ -1,7 +1,7 @@
 const Area = require("../models/area");
 
 getAreaById = (idArea) => Area.findById(idArea);
-
+                          
 crearArea = (areaData) => {
   const coordinates = [];
   areaData.puntos.forEach((punto) => {

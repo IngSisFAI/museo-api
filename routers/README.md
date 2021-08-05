@@ -1,2 +1,0 @@
-# museo-api
-Proyecto museo 

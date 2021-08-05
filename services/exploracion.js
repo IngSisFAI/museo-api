@@ -2,6 +2,8 @@ const Exploracion = require("../models/exploracion");
 const Excavacion = require("../models/excavacion");
 // const servicioExcavacion = require('./excavacion');
 const servicioArea = require("./area");
+const jwt = require("jsonwebtoken");
+
 
 getExcavacionById = (excavacionId) => {
   return Excavacion.findById(excavacionId)
@@ -48,36 +50,64 @@ getExploracionById = (req, res) => {
 };
 
 getExploraciones = (req, res) => {
-  return Exploracion.find()
-    .then((exploraciones) => {
-      const exploracionesCompletas = exploraciones.map((exploracion) => {
-        let exploracionCompleta = {};
-        Object.assign(exploracionCompleta, exploracion._doc);
 
-        return servicioArea.getAreaById(exploracion.idArea).then((area) => {
-          let areaExploracion = {};
-          if (area) {
-            Object.assign(areaExploracion, area._doc);
-            exploracionCompleta.areaExploracion = areaExploracion;
-          }
 
-          const excavacionesCompletas = exploracion.idExcavaciones.map(
-            (excavacionId) => getExcavacionById(excavacionId)
-          );
-          return Promise.all(excavacionesCompletas).then((todas) => {
-            exploracionCompleta.excavaciones = todas;
-            return exploracionCompleta;
+  jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+    if (error) {
+      res.status(403).send({ msg: 'Acceso no permitido' });
+    } else {
+
+      return Exploracion.find()
+        .then((exploraciones) => {
+          const exploracionesCompletas = exploraciones.map((exploracion) => {
+            let exploracionCompleta = {};
+            Object.assign(exploracionCompleta, exploracion._doc);
+
+            if(exploracion.idArea!="")
+            {
+              
+            
+                  return servicioArea.getAreaById(exploracion.idArea).then((area) => {
+                    let areaExploracion = {};
+                    if (area) {
+                      Object.assign(areaExploracion, area._doc);
+                      exploracionCompleta.areaExploracion = areaExploracion;
+                    }
+
+                    const excavacionesCompletas = exploracion.idExcavaciones.map(
+                      (excavacionId) => getExcavacionById(excavacionId)
+                    );
+                    return Promise.all(excavacionesCompletas).then((todas) => {
+                      exploracionCompleta.excavaciones = todas;
+                      return exploracionCompleta;
+                    });
+                  });
+          
+            }
+            else{
+              exploracionCompleta.areaExploracion = {};
+              const excavacionesCompletas = exploracion.idExcavaciones.map(
+                (excavacionId) => getExcavacionById(excavacionId)
+              );
+              return Promise.all(excavacionesCompletas).then((todas) => {
+                exploracionCompleta.excavaciones = todas;
+                return exploracionCompleta;
+              });
+              
+
+            }
+
           });
-        });
-      });
 
-      Promise.all(exploracionesCompletas).then((exploraciones) => {
-        res.status(200).send({ exploraciones });
-      });
-    })
-    .catch(() =>
-      res.status(500).send({ message: `Error al realizar la petición` })
-    );
+          Promise.all(exploracionesCompletas).then((exploraciones) => {
+            res.status(200).send({ exploraciones });
+          });
+        })
+        .catch((error) =>
+          res.status(500).send({ message: `Error al realizar la petición:`+ error })
+        );
+    }
+  });
 };
 
 getExploracion = (exploracionId) => {
