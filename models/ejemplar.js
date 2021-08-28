@@ -24,7 +24,7 @@ const Dupla = Schema({
     descripcion:String
 })
 
-const EjemplarSchema = Schema({
+const EjemplarOldSchema = Schema({
    tipoEjemplar:{type: String, enum:['Encontrado', 'No Encontrado']},
    taxonReino:String,
    taxonFilo:String,
@@ -56,6 +56,36 @@ const EjemplarSchema = Schema({
    descripcion2:String,
    descripcion3:String,
    perteneceExca:String
+})
+
+
+const EjemplarSchema = Schema({
+   sigla: String,
+   tipoColeccion: String,
+   fechaIngreso: Date,
+   fechaBaja: Date,
+   motivoBaja: String, 
+   taxonReino:String,
+   taxonFilo:String,
+   taxonClase:String,
+   taxonOrden:String,
+   taxonFamilia:String,
+   taxonGenero:String,
+   taxonEspecie:String,
+   eraGeologica:AreaGeologicaSchema,
+   fotosEjemplar:[Dupla],
+   videosEjemplar:[String],
+   ubicacionMuseo: String,
+   preparador: String,
+   tipoIntervencion: String, 
+   autores: String,
+   publicaciones: String, 
+   archivosPublicaciones: [String],
+   observacionesAdic: String, 
+   home:Boolean,
+   areaHallazgo:AreaHallazgoSchema,
+   perteneceExca:String
+
 })
 
 module.exports = mongoose.model('Ejemplar', EjemplarSchema)

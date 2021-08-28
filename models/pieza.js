@@ -4,11 +4,11 @@ const mongoose = require('mongoose')
 const Schema  = mongoose.Schema
 
 const MedidasPiezaSchema = Schema({
-    ancho:Number,
-    largo: Number,
-    alto: Number,
-    diametro: Number,
-    circunferencia: Number
+    ancho:String,
+    largo: String,
+    alto: String,
+    diametro: String,
+    circunferencia: String
 })
 
 const Dupla = Schema({

@@ -1,6 +1,7 @@
 'use strict'
 
 const Pieza = require('../models/pieza')
+const jwt = require("jsonwebtoken");
 
 function getpiezaId(req, res) { // busca una pieza por su ID - clave mongo
     let piezaId = req.params.piezaId
@@ -20,14 +21,26 @@ function getpiezaIdentificador(req, res) { // busca una pieza por su identificad
     })
 }
 
-function getpiezaEjemplar(req, res) { // busca las piezas asociadas a un Ejemplar
-    let idEjemplar = req.params.piezaId
-    Pieza.find({'perteneceEjemplar':idEjemplar}, (err,pieza)=>{
-        if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
-        if(!pieza) return res.status(404).send({message:`No existen Piezas para el Ejemplar`})
-        res.status(200).send({pieza: pieza})
+
+function getPiezasEjemplar(req, res){
+      let idEjemplar = req.params.ejemplarId
+
+      Pieza.find({'perteneceEjemplar':idEjemplar},(err,piezas)=>{
+        if(err) return res.status(500).send({message:`Error al realizar la peticion: ${err}`})
+              
+         jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+              if(error){
+                  res.status(403).send({error:'Acceso no permitido'});
+              }else{
+                  res.json({piezas});
+              } 
+         });
+
     })
 }
+
+
+
 
 function getpiezas(req, res){
     Pieza.find({},(err,piezas)=>{
@@ -62,6 +75,6 @@ module.exports ={
     getpiezas,
     getpiezaId,
     getpiezaIdentificador,
-    getpiezaEjemplar,
+    getPiezasEjemplar,
     savePieza
 }

@@ -4,15 +4,20 @@ const mongoose = require('mongoose')
 const Schema  = mongoose.Schema
 
 const BochonSchema = Schema({
-   nombre:String, 
-   nroCampo:Number,
+   nombre: String, 
+   codigoCampo: String,
+   nroBochon: String,
    preparador: String,
    preparadorID: String,
-   tipoPreparacion:{type: String, enum:['Química', 'Mecánica','Técnicas de extracción de microfósiles','Técnicas de concentración', 'Secciones delgadas','Consolidantes y adhesivos']},
+   tipoPreparacion: String,
    acidosAplicados: [String],
-   ejemplarAsociado: String,
-   excavacionId: String,
-   piezaId:String
+   ejemplarAsociado: [{ type: Schema.Types.ObjectId, ref: 'Ejemplar' }],
+   excavacionId: [{ type: Schema.Types.ObjectId, ref: 'Excavacion' }],
+   piezasId: [String],
+   piezasNames: [String], 
+   infoAdicional: String  
+
+
 })
 
 module.exports = mongoose.model('Bochon', BochonSchema)

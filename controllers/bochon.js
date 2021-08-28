@@ -1,6 +1,8 @@
 'use strict'
 
 const Bochon = require('../models/bochon')
+const jwt = require("jsonwebtoken");
+
 
 function getbochonId(req, res) { // busca un bochon por su ID - clave mongo
     let bochonId = req.params.bochonId
@@ -22,12 +24,41 @@ function getbochonCampo(req, res) { // busca un bochon por nro de campo
 
 
 function getbochones(req, res){
-    Bochon.find({},(err,bochones)=>{
-        if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
-        if(!bochones) return res.status(404).send({message:`No existen bochones`})
-        res.status(200).send({bochones: bochones})
-    })
+    Bochon.find({}).populate('ejemplarAsociado').exec(function(err,bochones){
+        if(err) return res.status(500).send({message:`Error al realizar la peticion: ${err}`})
+              
+         jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+              if(error){
+                  res.status(403).send({error:'Acceso no permitido'});
+              }else{
+              
+                  res.json({ bochones});
+              } 
+         });
+
+    });
+
 }
+
+function getBochonesExcavacion(req, res){
+     let excavacionId = req.params.excavacionId
+
+    Bochon.find({'excavacionId':excavacionId }).populate('ejemplarAsociado').exec(function(err,bochones){
+        if(err) return res.status(500).send({message:`Error al realizar la peticion: ${err}`})
+              
+         jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+              if(error){
+                  res.status(403).send({error:'Acceso no permitido'});
+              }else{
+              
+                  res.json({ bochones});
+              } 
+         });
+
+    });
+
+}
+
 
 function getbochonEjemplar(req, res) { // busca un bochon por su ejemplar Asociado
     let ejemAsociado = req.params.bochonId
@@ -44,22 +75,33 @@ function saveBochon(req,res){
       
     let bochon = new Bochon()
     bochon.nombre = req.body.nombre
-    bochon.nroCampo = req.body.nroCampo
+    bochon.codigoCampo = req.body.codigoCampo
+    bochon.nroBochon = req.body.nroBochon
     bochon.preparador = req.body.preparador
     bochon.preparadorID = req.body.preparadorID
     bochon.tipoPreparacion = req.body.tipoPreparacion
     bochon.acidosAplicados = req.body.acidosAplicados
     bochon.ejemplarAsociado = req.body.ejemplarAsociado
     bochon.excavacionId = req.body.excavacionId
-    bochon.piezaId = req.body.piezaId
+    bochon.piezasId = req.body.piezasId
+    bochon.piezasNames = req.body.piezasNames
+    bochon.infoAdicional = req.body.infoAdicional
 
-    bochon.save((err,bochonStrored)=> {
-        if(err) {res.status(500).send({message:`Error al salvar en la Base de Datos:${err}`}) 
-		   console.log(err)
-		}
-         res.status(200).send({bochon: bochonStrored})
-		 
-    })
+
+
+
+    jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+              if(error){
+                  res.status(403).send({msg:'Acceso no permitido'});
+              }else{
+                        bochon.save((err,bochonStrored)=> {
+                          if(err) res.status(500).send({msg:`Error al guardar en la Base de Datos:${err}`})
+                          res.json({bochon: bochonStrored})
+                        })
+                   } 
+    });
+
+
 }
 
 function getBochonNombre(req, res) { // busca  bochones por nombre
@@ -113,6 +155,7 @@ function deleteBochon(req,res){
 
 module.exports ={
     getbochones,
+    getBochonesExcavacion,
     getbochonCampo,
     getbochonId,
     getbochonEjemplar,
@@ -120,5 +163,5 @@ module.exports ={
     getBochonNombre,
     updateBochon,
     deleteBochon,
-	getBochonUnNombre
+    getBochonUnNombre
 }

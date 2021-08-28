@@ -49,14 +49,38 @@ api.get("/deleteDirectorio", verifyToken,fileCtrl.deleteDirectory);
 //Documentacion
 api.get("/documentacion", verifyToken,documentacionCtrl.getDocumentacion);
 api.post("/saveDocumentacion", verifyToken,documentacionCtrl.saveDocumentacion);
+api.get("/documentacionId/:documentacionId", verifyToken, documentacionCtrl.getDocumentacionId);
+api.put("/updateDocumentacion/:documentacionId", verifyToken, documentacionCtrl.updateDocumentacion);
+api.delete("/documentacion/:documentacionId",verifyToken, documentacionCtrl.deleteDocumentacion);
 
-
-
- 
 
 // Excavacion
-api.get("/excavacion", excavacionCtrl.getExcavaciones);
-api.get("/excavacionId/:excavacionId", excavacionCtrl.getExcavacionId);
+api.post("/excavacion",  verifyToken, excavacionCtrl.saveExcavacion);
+api.get("/excavacion", verifyToken, excavacionCtrl.getAllExcavaciones);
+api.get("/excavacionId/:excavacionId", verifyToken, excavacionCtrl.getExcavacionId);
+api.put("/excavacion/:excavacionId", verifyToken, excavacionCtrl.updateExcavacion);
+
+
+//Ejemplares
+api.get("/ejemplares", verifyToken, ejemplarCtrl.getejemplares);
+
+
+//Piezas
+api.get("/piezasEjemplar/:ejemplarId", verifyToken, piezaCtrl.getPiezasEjemplar);
+
+
+//bochones
+api.post("/bochon", verifyToken, bochonCtrl.saveBochon);
+api.get("/bochon", verifyToken, bochonCtrl.getbochones);
+api.get("/bochon/:excavacionId", verifyToken, bochonCtrl.getBochonesExcavacion);
+
+
+
+
+//entradas a revisar!!!!!
+
+
+
 api.get("/areaExcavacion/:excavacionId", excavacionCtrl.getAreaExcavacion);
 api.get("/areasExcavaciones", excavacionCtrl.getExcavaciones);
 api.get("/excavacionNombre/:excavacionId", excavacionCtrl.getExcavacionNombre);
@@ -107,7 +131,7 @@ api.get("/excavacionPorFoto/:fotoId", excavacionCtrl.getExcavacionPorIdFoto);
 api.put("/excavacion", excavacionCtrl.modificarExcavacion);
 //api.delete('/excavacion', excavacionCtrl.removeExcavacion)
 
-api.get("/bochon", bochonCtrl.getbochones);
+
 api.get("/bochonId/:bochonId", bochonCtrl.getbochonId);
 api.get("/bochonCampo/:bochonId", bochonCtrl.getbochonCampo);
 api.get("/bochonEjemplar/:bochonId", bochonCtrl.getbochonEjemplar);
@@ -120,10 +144,10 @@ api.delete("/bochon/:bochonId", bochonCtrl.deleteBochon);
 api.get("/pieza", piezaCtrl.getpiezas);
 api.get("/piezaId/:piezaId", piezaCtrl.getpiezaId);
 api.get("/piezaIdentificador/:piezaId", piezaCtrl.getpiezaIdentificador);
-api.get("/piezaEjemplar/:piezaId", piezaCtrl.getpiezaEjemplar);
+
 api.post("/pieza", piezaCtrl.savePieza);
 
-api.get("/ejemplar", ejemplarCtrl.getejemplares);
+
 api.get("/ejemplarId/:ejemplarId", ejemplarCtrl.getejemplarId);
 api.get(
   "/ejemplarNroColeccion/:ejemplarId",

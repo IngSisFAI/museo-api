@@ -1,6 +1,8 @@
 'use strict'
 
 const Ejemplar = require('../models/ejemplar')
+const jwt = require("jsonwebtoken");
+
 
 function getejemplarId(req, res) { // busca un ejemplar por su ID - clave mongo
     let ejemplarId = req.params.ejemplarId
@@ -29,13 +31,22 @@ function getejemplarExca(req, res) { // busca los ejemplares que pertenecen a un
     })
 }
 
+
 function getejemplares(req, res){
-    Ejemplar.find({},(err,ejemplares)=>{
-        if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
-        if(!ejemplares) return res.status(404).send({message:`No existen ejemplares`})
-        res.status(200).send({ejemplares: ejemplares})
+      Ejemplar.find({},(err,ejemplares)=>{
+        if(err) return res.status(500).send({message:`Error al realizar la peticion: ${err}`})
+              
+         jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+              if(error){
+                  res.status(403).send({error:'Acceso no permitido'});
+              }else{
+                  res.json({ ejemplares});
+              } 
+         });
+
     })
 }
+
 
 function getejemplarHome(req, res) { // busca un ejemplar a mostrar en el home segun ubicacion
     let homeUbicacion = req.params.ejemplarId

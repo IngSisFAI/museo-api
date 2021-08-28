@@ -1,6 +1,9 @@
 "use strict";
 const Excavacion = require("../models/excavacion");
 const Exploracion = require("../models/exploracion");
+const jwt = require("jsonwebtoken");
+
+
 
 const servicioExcavacion = require("../services/excavacion");
 
@@ -92,63 +95,86 @@ function getExcavacionesColector(req, res) {
   });
 }
 
+
+
 function saveExcavacion(req, res) {
   console.log("POST /api/excavacion");
 
   let excavacion = new Excavacion();
-  excavacion.nombre = req.body.nombre;
-  excavacion.codigo = req.body.codigo;
-  excavacion.descripcion = req.body.descripcion;
+  excavacion.nombreArea = req.body.nombreArea;
+  excavacion.codigoCampo = req.body.codigoCampo;
   excavacion.fechaInicio = req.body.fechaInicio;
-  excavacion.fechaBaja = req.body.fechaBaja;
-  excavacion.motivoBaja = req.body.motivoBaja;
+  excavacion.fechaTermino = req.body.fechaTermino;
   excavacion.director = req.body.director;
   excavacion.directorId = req.body.directorId;
-  excavacion.colector = req.body.colector;
-  excavacion.paleontologo = req.body.paleontologo;
-  excavacion.bochonesEncontrados = req.body.bochonesEncontrados;
-
-  excavacion.puntoGps = req.body.puntoGPS;
-  excavacion.idArea = req.body.idArea;
+  excavacion.auxiliares = req.body.auxiliares;
+  excavacion.profesionales = req.body.profesionales;
+  excavacion.muestraHome = req.body.muestraHome;
+  excavacion.tipoHallazgo = req.body.tipoHallazgo;
+  excavacion.archivoDenuncia = req.body.archivoDenuncia;
   excavacion.idExploracion = req.body.idExploracion;
-  excavacion.idPais = req.body.idPais;
+  excavacion.datosGeologicos = req.body.datosGeologicos;
+  excavacion.datosTaxonomicos = req.body.datosTaxonomicos;
+  excavacion.idArea = req.body.idArea;
+  excavacion.puntoGps = req.body.puntoGPS;
   excavacion.idCiudad = req.body.idCiudad;
   excavacion.idProvincia = req.body.idProvincia;
+  excavacion.iPais = req.body.idPais;
+  excavacion.bochonesEncontrados = req.body.bochonesEncontrados;
+  excavacion.fotosExcavacion = req.body.fotosExcavacion;
+  excavacion.videosExcavacion = req.body.videosExcavacion;
 
-  excavacion.muestraHome = req.body.muestraHome;
 
-  excavacion.save((err, excavacionStored) => {
-    if (err) {
-      return res
-        .status(500)
-        .send({ message: `Error al salvar en la Base de Datos:${err}` });
+ console.log("Excavacion:", req.body);
+  
+
+  jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+    if (error) {
+     
+      res.status(403).send({ msg: 'Acceso no permitido', error: error });
+    } else {
+
+
+      excavacion.save((err, excavacionStored) => {
+        if (err) {
+          return res
+            .status(500)
+            .send({ message: `Error al salvar en la Base de Datos:${err}` });
+        }
+
+       /* Exploracion.findById({_id:excavacion.idExploracion})
+          .then((exploracion) => {
+            return Exploracion.update(
+              { _id: exploracion._id },
+              {
+                $set: {
+                  idExcavaciones: [
+                    ...exploracion.idExcavaciones,
+                    excavacionStored._id,
+                  ],
+                },
+              }
+            );
+          })
+          .catch(() =>
+            res
+              .status(500)
+              .send({ message: `Error al salvar en la Base de Datos:${err}` })
+          );*/
+
+       // res.status(200).send({ excavacion: excavacionStored });
+ 
+        res.json({ excavacion: excavacionStored });
+
+      });
+
     }
-
-    Exploracion.findById(excavacion.idExploracion)
-      .then((exploracion) => {
-        return Exploracion.update(
-          { _id: exploracion._id },
-          {
-            $set: {
-              idExcavaciones: [
-                ...exploracion.idExcavaciones,
-                excavacionStored._id,
-              ],
-            },
-          }
-        );
-      })
-      .catch(() =>
-        res
-          .status(500)
-          .send({ message: `Error al salvar en la Base de Datos:${err}` })
-      );
-
-    res.status(200).send({ excavacion: excavacionStored });
   });
+
+
 }
 
-function getExcavacionId(req, res) {
+/*function getExcavacionId(req, res) {
   // busca una excavacion por su ID - clave mongo
   let excavacionId = req.params.excavacionId;
   Excavacion.findById(excavacionId, (err, excavacionId) => {
@@ -160,9 +186,31 @@ function getExcavacionId(req, res) {
       return res.status(404).send({ message: `La excavacion no existe` });
     res.status(200).send({ excavacionId: excavacionId });
   });
+}*/
+
+
+function getExcavacionId(req, res) { 
+   // busca una persona por su ID - clave mongo
+   let excavacionId = req.params.excavacionId;
+
+   jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+          if(error){
+                res.status(403).send({msg:'Acceso no permitido'});
+           }else{
+                   Excavacion.findById(excavacionId, (err,excavacionId)=>{
+                      if(err) return res.status(500).send({message:`Error al realizar la peticion: ${err}`})
+                      res.json({excavacionId });
+                   })
+           
+         }
+
+   });
+
 }
 
-function updateExcavacion(req, res) {
+
+
+/*function updateExcavacion(req, res) {
   let excavacionId = req.params.excavacionId;
   let update = req.body;
   console.log("POST /api/excavacion/:ExcavacionId UpdateExcavacion......");
@@ -183,7 +231,26 @@ function updateExcavacion(req, res) {
       res.status(200).send({ excavacion: excavacionUpdate });
     }
   );
+}*/
+
+function updateExcavacion(req,res){
+    let excavacionId = req.params.excavacionId;
+    let update = req.body;
+    console.log("PUT /api/excavacion/:ExcavacionId UpdateExcavacion......");
+   console.log(req.body);
+
+     jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+              if(error){
+                  res.status(403).send({msg:'Acceso no permitido'});
+              }else{
+                           Excavacion.findByIdAndUpdate(excavacionId, update, (err, excavacionUpdate)=>{
+                                 if(err) return  res.status(500).send({message: `Error al tratar de actualizar: ${err}`})
+                                 res.json({excavacion: excavacionUpdate})
+                           });
+                    } 
+    });
 }
+
 
 function updateExcavacionBochones(req, res) {
   let excavacionId = req.params.excavacionId;
@@ -306,6 +373,22 @@ function getExcavacionPorIdFoto(req, res) {
   );
 }
 
+function getAllExcavaciones(req, res){
+      Excavacion.find({},(err,excavaciones)=>{
+        if(err) return res.status(500).send({message:`Error al realizar la peticion: ${err}`})
+              
+         jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+              if(error){
+                  res.status(403).send({error:'Acceso no permitido'});
+              }else{
+                  res.json({ excavaciones });
+              } 
+         });
+
+    })
+}
+
+
 module.exports = {
   getExcavaciones,
   getExcavacionNombre,
@@ -328,4 +411,5 @@ module.exports = {
   getExcavacionesFiltroName,
   updateExcavacionBochones,
   getExcavacionPorIdFoto,
+  getAllExcavaciones
 };
