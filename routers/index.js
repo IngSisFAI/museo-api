@@ -34,7 +34,7 @@ api.get("/personaId/:personaId", verifyToken, personaCtrl.getPersonaId);
 
 
 //Exploracion
-api.get("/exploracion", verifyToken, exploracionCtrl.getExploraciones);
+api.get("/exploracion", verifyToken, exploracionCtrl.getAllExploraciones);
 api.post("/exploracion", verifyToken, exploracionCtrl.saveExploracion);
 api.get("/exploracionId/:exploracionId", verifyToken, exploracionCtrl.getExploracionId);
 api.put("/exploracion/:exploracionId", verifyToken, exploracionCtrl.updateExploracion); 
@@ -63,6 +63,8 @@ api.put("/excavacion/:excavacionId", verifyToken, excavacionCtrl.updateExcavacio
 
 //Ejemplares
 api.get("/ejemplares", verifyToken, ejemplarCtrl.getejemplares);
+api.get("/ejemplarExca/:excavacionId", verifyToken,ejemplarCtrl.getejemplarExca);
+api.put("/ejemplar/:ejemplarId",  verifyToken,ejemplarCtrl.updateEjemplar);
 
 
 //Piezas
@@ -72,7 +74,10 @@ api.get("/piezasEjemplar/:ejemplarId", verifyToken, piezaCtrl.getPiezasEjemplar)
 //bochones
 api.post("/bochon", verifyToken, bochonCtrl.saveBochon);
 api.get("/bochon", verifyToken, bochonCtrl.getbochones);
-api.get("/bochon/:excavacionId", verifyToken, bochonCtrl.getBochonesExcavacion);
+api.get("/bochonExca/:excavacionId", verifyToken, bochonCtrl.getBochonesExcavacion);
+api.delete("/bochon/:bochonId", verifyToken, bochonCtrl.deleteBochon);
+api.get("/bochonId/:bochonId", verifyToken,bochonCtrl.getbochonId);
+api.put("/bochon/:bochonId", verifyToken, bochonCtrl.updateBochon);
 
 
 
@@ -132,14 +137,13 @@ api.put("/excavacion", excavacionCtrl.modificarExcavacion);
 //api.delete('/excavacion', excavacionCtrl.removeExcavacion)
 
 
-api.get("/bochonId/:bochonId", bochonCtrl.getbochonId);
 api.get("/bochonCampo/:bochonId", bochonCtrl.getbochonCampo);
 api.get("/bochonEjemplar/:bochonId", bochonCtrl.getbochonEjemplar);
 api.post("/bochon", bochonCtrl.saveBochon);
 api.get("/bochonNombre/:nombre", bochonCtrl.getBochonNombre);
 api.get("/bochonUnNombre/:nombre", bochonCtrl.getBochonUnNombre);
-api.put("/bochon/:bochonId", bochonCtrl.updateBochon);
-api.delete("/bochon/:bochonId", bochonCtrl.deleteBochon);
+
+
 
 api.get("/pieza", piezaCtrl.getpiezas);
 api.get("/piezaId/:piezaId", piezaCtrl.getpiezaId);
@@ -154,7 +158,6 @@ api.get(
   ejemplarCtrl.getejemplarNroColeccion
 );
 api.get("/ejemplarHome/:ejemplarId", ejemplarCtrl.getejemplarHome);
-api.get("/ejemplarExca/:ejemplarId", ejemplarCtrl.getejemplarExca);
 api.get("/ejemplarPorFoto/:fotoId", ejemplarCtrl.getEjemplarPorIdFoto);
 //api.post('/ejemplar', ejemplarCtrl.saveEjemplar)
 
@@ -200,7 +203,7 @@ api.get("/area", areaCtrl.getAreas);
 
 //Ejemplar
 api.post("/ejemplar", ejemplarCtrl.saveEjemplar);
-api.put("/ejemplar/:ejemplarId", ejemplarCtrl.updateEjemplar);
+
 api.delete("/ejemplar/:ejemplarId", ejemplarCtrl.deleteEjemplar);
 
 api.get(

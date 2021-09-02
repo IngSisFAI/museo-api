@@ -23,12 +23,23 @@ function getejemplarNroColeccion(req, res) { // busca un ejemplar por nro de col
 }
 
 function getejemplarExca(req, res) { // busca los ejemplares que pertenecen a una excavación
-    let ejemplar = req.params.ejemplarId
-    Ejemplar.find({'perteneceExca':ejemplar}, (err,ejemplar)=>{
-        if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
-        if(!ejemplar) return res.status(404).send({message:`No hay ejemplares para la excavacion`})
-        res.status(200).send({ejemplar: ejemplar})
+    let excavacion = req.params.excavacionId
+
+    Ejemplar.find({'perteneceExca':excavacion}, (err,ejemplar)=>{
+        if(err) return res.status(500).send({message:`Error al realizar la peticion: ${err}`})
+              
+         jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+              if(error){
+                  res.status(403).send({error:'Acceso no permitido'});
+              }else{
+                  res.json({ ejemplar});
+              } 
+         });
+
     })
+
+
+
 }
 
 
@@ -105,18 +116,35 @@ function saveEjemplar(req,res){
     })
 }
 
-function updateEjemplar(req,res){
-    let ejemplarId= req.params.ejemplarId
-    let update= req.body
-    console.log('POST /api/ejemplar/:ejemplarId UpdatePersona......')
-    console.log(req.body)
-    
-    Ejemplar.findByIdAndUpdate(ejemplarId, update, (err, ejemplarUpdate)=>{
-        if(err) return  res.status(500).send({message: `Error al tratar de actualizar: ${err}`})
-        if(!ejemplarUpdate) return res.status(404).send({message:`La persona Update no Existe`})
-        res.status(200).send({ejemplar: ejemplarUpdate})
-    
-    })
+function updateEjemplar(req, res) {
+  let ejemplarId = req.params.ejemplarId
+  let update = req.body
+  console.log('POST /api/ejemplar/:ejemplarId Update Ejemplar......')
+  console.log(req.body)
+
+  jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+    if (error) {
+      res.status(403).send({ msg: 'Acceso no permitido' });
+    } else {
+      Ejemplar.findByIdAndUpdate(
+        ejemplarId,
+        update,
+        (err, ejemplarUpdate) => {
+          if (err)
+            return res
+              .status(500)
+              .send({ message: `Error al tratar de actualizar: ${err}` });
+          if (!ejemplarUpdate)
+            return res.status(404).send({ message: `La Exploracion  Update no Existe` });
+          res.status(200).send({ ejemplar: ejemplarUpdate });
+        }
+      );
+
+    }
+  });
+
+
+
 }
 
 function deleteEjemplar(req,res){

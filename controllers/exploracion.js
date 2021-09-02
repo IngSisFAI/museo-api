@@ -180,6 +180,22 @@ const borrarExploraciones = (req, res) => {
 const modificarAreaExploracion = (req, res) =>
   servicioExploracion.modificarAreaExploracion(req, res);
 
+function getAllExploraciones(req, res){
+      Exploracion.find({},(err,exploraciones)=>{
+        if(err) return res.status(500).send({message:`Error al realizar la peticion: ${err}`})
+              
+         jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+              if(error){
+                  res.status(403).send({error:'Acceso no permitido'});
+              }else{
+                  res.json({ exploraciones });
+              } 
+         });
+
+    })
+}
+
+
 module.exports = {
   getExploracionById,
   getExploraciones,
@@ -190,5 +206,6 @@ module.exports = {
   getExploracionId,
   updateExploracion,
   deleteExploracion,
-  getExploracionesFiltro
+  getExploracionesFiltro,
+ getAllExploraciones
 };

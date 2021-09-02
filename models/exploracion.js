@@ -22,4 +22,5 @@ const ExploracionSchema = new Schema({
 });
 
 
+
 module.exports = mongoose.model('Exploracion', ExploracionSchema);
