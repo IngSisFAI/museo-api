@@ -81,6 +81,17 @@ api.put("/bochon/:bochonId", verifyToken, bochonCtrl.updateBochon);
 
 
 
+//Usuarios
+api.get("/validaUsuario", usuarioCtrl.validaUsuario);
+api.get("/usuarios", verifyToken, usuarioCtrl.getUsuarios);
+api.delete("/deleteUsuario", verifyToken, usuarioCtrl.deleteUsuario);
+api.get("/existeUsuario", verifyToken, usuarioCtrl.existeUsuario);
+api.post("/saveUsuario", verifyToken,usuarioCtrl.saveUsuario);
+api.get("/getUsuario", verifyToken, usuarioCtrl.getUsuarioId);
+api.put("/editUsuario", verifyToken, usuarioCtrl.updateUsuario);
+
+
+
 
 //entradas a revisar!!!!!
 
@@ -243,14 +254,6 @@ api.get("/coleccion", coleccionCtrl.getColecciones);
 
 
 
-//usuarios
-api.post("/saveUsuario", usuarioCtrl.saveUsuario);
-api.get("/usuarios", usuarioCtrl.getUsuarios);
-api.get("/validaUsuario", usuarioCtrl.validaUsuario);
-api.get("/existeUsuario", usuarioCtrl.existeUsuario);
-api.delete("/deleteUsuario", usuarioCtrl.deleteUsuario);
-api.get("/getUsuario", usuarioCtrl.getUsuarioId);
-api.put("/editUsuario", usuarioCtrl.updateUsuario);
 
 
 // Authorization: Bearer <token>
