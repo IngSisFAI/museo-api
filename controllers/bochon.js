@@ -79,15 +79,21 @@ function getBochonesExcavacion(req, res){
 }
 
 
-function getbochonEjemplar(req, res) { // busca un bochon por su ejemplar Asociado
-    let ejemAsociado = req.params.bochonId
-    Bochon.find({'ejemplarAsociado':ejemAsociado}, (err,bochon)=>{
-        if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
-        if(!bochon) return res.status(404).send({message:`El bochon no existe buscada`})
-        res.status(200).send({bochon: bochon})
-    })
-}
+function getbochonEjemplar(req, res) { // busca los bochones por su ejemplar Asociado
+  let ejemAsociado = req.params.ejemplarId
 
+   Bochon.find({ 'ejemplarAsociado': ejemAsociado }).populate('excavacionId').exec(function(err,bochones){ 
+    if (err) return res.status(500).send({ message: `Error al realizar la peticion: ${err}` })
+    jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+      if (error) {
+        res.status(403).send({ error: 'Acceso no permitido' });
+      } else {
+
+        res.json({ bochones });
+      }
+    });
+  })
+}
 function saveBochon(req,res){
     console.log('POST /api/bochon')
     console.log(req.body)

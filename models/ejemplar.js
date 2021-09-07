@@ -62,6 +62,7 @@ const EjemplarOldSchema = Schema({
 const EjemplarSchema = Schema({
    sigla: String,
    tipoColeccion: String,
+   tipoColeccionId: String,
    fechaIngreso: Date,
    fechaBaja: Date,
    motivoBaja: String, 
@@ -80,7 +81,8 @@ const EjemplarSchema = Schema({
    tipoIntervencion: String, 
    autores: String,
    publicaciones: String, 
-   archivosPublicaciones: [String],
+   archivosCurriculum: [String],
+   materialIngresadoPor: String,
    observacionesAdic: String, 
    home:Boolean,
    areaHallazgo:AreaHallazgoSchema,

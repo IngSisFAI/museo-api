@@ -251,6 +251,28 @@ function updateExcavacion(req,res){
     });
 }
 
+function deleteExcavacion(req, res) {
+  let excavacionId = req.params.excavacionId;
+
+  jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+    if (error) {
+      res.status(403).send({ error: 'Acceso no permitido' });
+    } else {
+
+      Excavacion.findByIdAndRemove(excavacionId, (err, excavacion) => {
+        if (err) return res.status(500).send(err);
+        const response = {
+          message: "Ejemplar satisfactoriamente borrada",
+          id: excavacion._id
+        };
+        return res.status(200).send(response);
+      });
+    }
+  });
+
+}
+
+
 
 function updateExcavacionBochones(req, res) {
   let excavacionId = req.params.excavacionId;
@@ -277,21 +299,7 @@ function updateExcavacionBochones(req, res) {
   );
 }
 
-function deleteExcavacion(req, res) {
-  let excavacionId = req.params.excavacionId;
 
-  Excavacion.findByIdAndRemove(excavacionId, (err, excavacion) => {
-    // As always, handle any potential errors:
-    if (err) return res.status(500).send(err);
-    // We'll create a simple object to send back with a message and the id of the document that was removed
-    // You can really do this however you want, though.
-    const response = {
-      message: "Excavacion satisfactoriamente borrada",
-      id: excavacion._id,
-    };
-    return res.status(200).send(response);
-  });
-}
 
 function getExcavacionesFiltro(req, res) {
   let codigo = req.params.unCodigo;

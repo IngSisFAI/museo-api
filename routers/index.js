@@ -64,11 +64,11 @@ api.put("/excavacion/:excavacionId", verifyToken, excavacionCtrl.updateExcavacio
 //Ejemplares
 api.get("/ejemplares", verifyToken, ejemplarCtrl.getejemplares);
 api.get("/ejemplarExca/:excavacionId", verifyToken,ejemplarCtrl.getejemplarExca);
-api.put("/ejemplar/:ejemplarId",  verifyToken,ejemplarCtrl.updateEjemplar);
+api.put("/ejemplar/:ejemplarId",  verifyToken, ejemplarCtrl.updateEjemplar);
+api.delete("/ejemplar/:ejemplarId", verifyToken, ejemplarCtrl.deleteEjemplar);
+api.post("/ejemplar", verifyToken,ejemplarCtrl.saveEjemplar);
 
 
-//Piezas
-api.get("/piezasEjemplar/:ejemplarId", verifyToken, piezaCtrl.getPiezasEjemplar);
 
 
 //bochones
@@ -78,6 +78,7 @@ api.get("/bochonExca/:excavacionId", verifyToken, bochonCtrl.getBochonesExcavaci
 api.delete("/bochon/:bochonId", verifyToken, bochonCtrl.deleteBochon);
 api.get("/bochonId/:bochonId", verifyToken,bochonCtrl.getbochonId);
 api.put("/bochon/:bochonId", verifyToken, bochonCtrl.updateBochon);
+api.get("/bochonEjemplar/:ejemplarId", verifyToken, bochonCtrl.getbochonEjemplar);
 
 
 
@@ -91,6 +92,18 @@ api.get("/getUsuario", verifyToken, usuarioCtrl.getUsuarioId);
 api.put("/editUsuario", verifyToken, usuarioCtrl.updateUsuario);
 
 
+//colecciones
+api.get("/coleccion", verifyToken, coleccionCtrl.getColecciones);
+
+//Piezas
+api.post("/pieza", verifyToken,piezaCtrl.savePieza);
+api.get("/piezasEjemplar/:ejemplarId", verifyToken, piezaCtrl.getPiezasEjemplar);
+api.delete("/pieza/:piezaId", verifyToken,piezaCtrl.deletePieza);
+api.get("/piezaId/:piezaId", verifyToken, piezaCtrl.getpiezaId);
+api.put("/pieza/:piezaId", verifyToken,piezaCtrl.updatePieza);
+api.get("/ejemplarId/:ejemplarId", verifyToken, ejemplarCtrl.getejemplarId);
+
+
 
 
 //entradas a revisar!!!!!
@@ -99,71 +112,58 @@ api.put("/editUsuario", verifyToken, usuarioCtrl.updateUsuario);
 
 api.get("/areaExcavacion/:excavacionId", excavacionCtrl.getAreaExcavacion);
 api.get("/areasExcavaciones", excavacionCtrl.getExcavaciones);
-api.get("/excavacionNombre/:excavacionId", excavacionCtrl.getExcavacionNombre);
-api.get("/excavacionHome/:excavacionId", excavacionCtrl.getExcavacionesHome);
-api.get(
-  "/excavacionDirector/:excavacionId",
-  excavacionCtrl.getExcavacionesDirector
-);
-api.get(
-  "/excavacionPaleontologo/:excavacionId",
-  excavacionCtrl.getExcavacionesPaleontologo
-);
-api.get(
-  "/excavacionColector/:excavacionId",
-  excavacionCtrl.getExcavacionesColector
-);
-api.post("/areaExcavacion", excavacionCtrl.crearExcavacion);
-api.put(
-  "/areaExcavacion/:excavacionId",
-  excavacionCtrl.modificarAreaExcavacion
-);
+api.put("/areaExcavacion/:excavacionId", excavacionCtrl.modificarAreaExcavacion);
+
+api.delete("/excavacion/:excavacionId", excavacionCtrl.deleteExcavacion);
 api.delete("/excavacion", excavacionCtrl.borrarExcavaciones);
 
-api.get("/excavacionId/:excavacionId", excavacionCtrl.getExcavacionId);
-api.post("/excavacion", excavacionCtrl.saveExcavacion);
-api.put("/excavacion/:excavacionId", excavacionCtrl.updateExcavacion);
-api.put(
-  "/excavacionBochon/:excavacionId",
-  excavacionCtrl.updateExcavacionBochones
-);
-api.delete("/excavacion/:excavacionId", excavacionCtrl.deleteExcavacion);
-api.get(
-  "/excavacionFiltro/:unCodigo&:unNombre",
-  excavacionCtrl.getExcavacionesFiltro
-);
-api.get(
-  "/excavacionFiltroCode/:unCodigo",
-  excavacionCtrl.getExcavacionesFiltroCode
-);
-api.get(
-  "/excavacionFiltroName/:unNombre",
-  excavacionCtrl.getExcavacionesFiltroName
-);
 
-api.get("/excavacion/:excavacionId", excavacionCtrl.getExcavacion);
-api.get("/excavacionPorFoto/:fotoId", excavacionCtrl.getExcavacionPorIdFoto);
-
-api.put("/excavacion", excavacionCtrl.modificarExcavacion);
+//api.get("/excavacion/:excavacionId", excavacionCtrl.getExcavacion);
+//api.put("/excavacion", excavacionCtrl.modificarExcavacion);
 //api.delete('/excavacion', excavacionCtrl.removeExcavacion)
+//Se usaran para los mapas???
 
+
+
+
+api.get("/excavacionNombre/:excavacionId", excavacionCtrl.getExcavacionNombre);
+api.get("/excavacionHome/:excavacionId", excavacionCtrl.getExcavacionesHome);
+
+api.get("/excavacionDirector/:excavacionId", excavacionCtrl.getExcavacionesDirector);
+api.get("/excavacionPaleontologo/:excavacionId", excavacionCtrl.getExcavacionesPaleontologo);
+api.get( "/excavacionColector/:excavacionId", excavacionCtrl.getExcavacionesColector);
+api.post("/areaExcavacion", excavacionCtrl.crearExcavacion);
+
+api.get("/excavacionFiltro/:unCodigo&:unNombre",excavacionCtrl.getExcavacionesFiltro);
+api.get("/excavacionFiltroCode/:unCodigo", excavacionCtrl.getExcavacionesFiltroCode);
+api.get("/excavacionFiltroName/:unNombre",excavacionCtrl.getExcavacionesFiltroName);
+api.put("/excavacionBochon/:excavacionId", excavacionCtrl.updateExcavacionBochones);
 
 api.get("/bochonCampo/:bochonId", bochonCtrl.getbochonCampo);
-api.get("/bochonEjemplar/:bochonId", bochonCtrl.getbochonEjemplar);
+
 api.post("/bochon", bochonCtrl.saveBochon);
 api.get("/bochonNombre/:nombre", bochonCtrl.getBochonNombre);
 api.get("/bochonUnNombre/:nombre", bochonCtrl.getBochonUnNombre);
 
-
-
 api.get("/pieza", piezaCtrl.getpiezas);
-api.get("/piezaId/:piezaId", piezaCtrl.getpiezaId);
-api.get("/piezaIdentificador/:piezaId", piezaCtrl.getpiezaIdentificador);
-
-api.post("/pieza", piezaCtrl.savePieza);
 
 
-api.get("/ejemplarId/:ejemplarId", ejemplarCtrl.getejemplarId);
+//api.get("/excavacionId/:excavacionId", excavacionCtrl.getExcavacionId);
+//api.post("/excavacion", excavacionCtrl.saveExcavacion);
+//api.put("/excavacion/:excavacionId", excavacionCtrl.updateExcavacion);
+
+
+//api.get("/excavacionPorFoto/:fotoId", excavacionCtrl.getExcavacionPorIdFoto);
+
+
+
+
+
+
+
+
+
+
 api.get(
   "/ejemplarNroColeccion/:ejemplarId",
   ejemplarCtrl.getejemplarNroColeccion
@@ -213,9 +213,9 @@ api.get("/ciudadIdProv/:provId", ciudadCtrl.getCiudadIdProv);
 api.get("/area", areaCtrl.getAreas);
 
 //Ejemplar
-api.post("/ejemplar", ejemplarCtrl.saveEjemplar);
 
-api.delete("/ejemplar/:ejemplarId", ejemplarCtrl.deleteEjemplar);
+
+
 
 api.get(
   "/ejemplarFiltro/:unNroColeccion&:unNombre&:unaUbicacion",
@@ -250,7 +250,7 @@ api.get("/acido", acidosCtrl.getAcidos);
 api.get("/tipoPreparacion", tiposPreparacionCtrl.getTiposPreparacion);
 
 //acidos
-api.get("/coleccion", coleccionCtrl.getColecciones);
+
 
 
 

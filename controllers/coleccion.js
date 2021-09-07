@@ -1,24 +1,34 @@
 'use strict'
 
 const Coleccion = require('../models/coleccion')
+const jwt = require("jsonwebtoken");
 
 
-function getColecciones(req, res){
 
-var query = Coleccion.find({});
+function getColecciones(req, res) {
 
-// sort by nombre
-query.sort({ nombre: 1 });
+  jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+    if (error) {
+      res.status(403).send({ msg: 'Acceso no permitido' });
+    } else {
 
-// execute the query at a later time
-query.exec(function (err, colecciones) {
-  if(err) return res.status(500).send({message:`Error al realizar la peticion: ${err}`})
-        if(!colecciones) return res.status(404).send({message:`No existen colecciones`})
-        res.status(200).send({colecciones: colecciones})
-})
+
+      var query = Coleccion.find({});
+
+      // sort by nombre
+      query.sort({ nombre: 1 });
+
+      // execute the query at a later time
+      query.exec(function (err, colecciones) {
+        if (err) return res.status(500).send({ message: `Error al realizar la peticion: ${err}` })
+        res.json({ colecciones });
+
+      })
+    }
+  });
+
 
 }
-
 
 module.exports ={
     getColecciones

@@ -6,11 +6,21 @@ const jwt = require("jsonwebtoken");
 
 function getejemplarId(req, res) { // busca un ejemplar por su ID - clave mongo
     let ejemplarId = req.params.ejemplarId
-    Ejemplar.findById(ejemplarId, (err,ejemplarId)=>{
-        if(err) return res.status(500).send({message:`Error al realizar la petición: ${err}`})
-        if(!ejemplarId) return res.status(404).send({message:`El bochon no existe`})
-        res.status(200).send({ejemplarId: ejemplarId})
+
+     Ejemplar.findById(ejemplarId,(err,ejemplarId)=>{
+        if(err) return res.status(500).send({message:`Error al realizar la peticion: ${err}`})
+              
+         jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+              if(error){
+                  res.status(403).send({error:'Acceso no permitido'});
+              }else{
+                  res.json({ejemplarId});
+              } 
+         });
+
     })
+
+
 }
 
 function getejemplarNroColeccion(req, res) { // busca un ejemplar por nro de coleccion
@@ -68,52 +78,53 @@ function getejemplarHome(req, res) { // busca un ejemplar a mostrar en el home s
     })
 }
 
-function saveEjemplar(req,res){
-    console.log('POST /api/ejemplar')
-    console.log(req.body)
-      
-    let ejemplar = new Ejemplar()
-    ejemplar.tipoEjemplar = req.body.tipoEjemplar
-    ejemplar.taxonReino = req.body.taxonReino
-    ejemplar.taxonFilo = req.body.taxonFilo
-    ejemplar.taxonClase = req.body.taxonClase
-    ejemplar.taxonOrden = req.body.taxonOrden
-    ejemplar.taxonFamilia = req.body.taxonFamilia
-    ejemplar.taxonGenero = req.body.taxonGenero
-    ejemplar.taxonEspecie = req.body.taxonEspecie
-    ejemplar.eraGeologica = req.body.eraGeologica
-    ejemplar.ilustracionCompleta = req.body.ilustracionCompleta
-	ejemplar.descripcionIC = req.body.descripcionIC
-    ejemplar.areaHallazgo = req.body.areaHallazgo
-    ejemplar.nroColeccion = req.body.nroColeccion
-    ejemplar.dimensionLargo = req.body.dimensionLargo
-    ejemplar.dimensionAlto = req.body.dimensionAlto
-    ejemplar.peso = req.body.peso
-    ejemplar.alimentacion = req.body.alimentacion
-    ejemplar.fechaIngresoColeccion = req.body.fechaIngresoColeccion
-    ejemplar.ubicacionMuseo = req.body.ubicacionMuseo
-    ejemplar.fechaBaja = req.body.fechaBaja
-    ejemplar.motivoBaja = req.body.motivoBaja
-    ejemplar.nombre = req.body.nombre
-    ejemplar.periodo = req.body.periodo
-    ejemplar.fotosEjemplar = req.body.fotosEjemplar
-    ejemplar.videosEjemplar = req.body.videosEjemplar
-    ejemplar.home=req.body.home
-    ejemplar.descripcion1=req.body.descripcion1
-    ejemplar.descripcion1A=req.body.descripcion1A
-    ejemplar.descripcion2=req.body.descripcion2
-    ejemplar.descripcion3=req.body.descripcion3
-    ejemplar.perteneceExca=req.body.perteneceExca  
-	
+function saveEjemplar(req, res) {
+  console.log('POST /api/ejemplar')
+  console.log(req.body)
 
-    
-    ejemplar.save((err,ejemplarStrored)=> {
-        if(err) {res.status(500).send({message:`Error al salvar en la Base de Datos:${err}`}) 
-		   console.log(err)
-		}
-         res.status(200).send({ejemplar: ejemplarStrored})
-		 
-    })
+
+  jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+    if (error) {
+      res.status(403).send({ msg: 'Acceso no permitido' });
+    } else {
+
+      let ejemplar = new Ejemplar()
+      ejemplar.sigla = req.body.sigla,
+        ejemplar.tipoColeccion = req.body.tipoColeccion,
+        ejemplar.tipoColeccionId = req.body.tipoColeccionId,
+        ejemplar.fechaIngreso = req.body.fechaIngeso,
+        ejemplar.fechaBaja = req.body.fechaBaja,
+        ejemplar.motivoBaja = req.body.motivoBaja,
+        ejemplar.taxonReino = req.body.taxonReino,
+        ejemplar.taxonFilo = req.body.taxonFilo,
+        ejemplar.taxonClase = req.body.taxonClase,
+        ejemplar.taxonClase = req.body.taxonClase,
+        ejemplar.taxonFamilia = req.body.taxonFamilia,
+        ejemplar.taxonGenero = req.body.taxonGenero,
+        ejemplar.taxonEspecie = req.body.taxonEspecie,
+        ejemplar.eraGeologica = req.body.eraGeologica,
+        ejemplar.fotosEjemplar = req.body.fotosEjemplar,
+        ejemplar.videosEjemplar = req.body.videosEjemplar,
+        ejemplar.ubicacionMuseo = req.body.ubicacionMuseo,
+        ejemplar.preparador = req.body.preparador,
+        ejemplar.tipoIntervencion = req.body.tipoIntervencion,
+        ejemplar.autores = req.body.autores,
+        ejemplar.publicaciones = req.body.publicaciones,
+        ejemplar.archivosCurriculum = req.body.archivosCurriculum,
+        ejemplar.observacionesAdic = req.body.observacionesAdic,
+        ejemplar.home = req.body.home,
+        ejemplar.areaHallazgo = req.body.areaHallazgo,
+        ejemplar.perteneceExca = req.body.perteneceExca
+
+
+      ejemplar.save((err, ejemplarStrored) => {
+        if (err) res.status(500).send({ message: `Error al salvar en la Base de Datos:${err}` });
+        res.json({ ejemplar: ejemplarStrored });
+      });
+    }
+  });
+
+
 }
 
 function updateEjemplar(req, res) {
@@ -147,23 +158,29 @@ function updateEjemplar(req, res) {
 
 }
 
-function deleteEjemplar(req,res){
-    let ejemplarId = req.params.ejemplarId
-	
-	Ejemplar.findByIdAndRemove(ejemplarId, (err, ejemplar) => {
-		// As always, handle any potential errors:
-		if (err) return res.status(500).send(err);
-		// We'll create a simple object to send back with a message and the id of the document that was removed
-		// You can really do this however you want, though.
-		const response = {
-			message: "Ejemplar satisfactoriamente borrada",
-			id: ejemplar._id
-		};
-		return res.status(200).send(response);
-	});
+function deleteEjemplar(req, res) {
+  let ejemplarId = req.params.ejemplarId
+
+
+  jwt.verify(req.token, 'museoapigeo21', (error, authData) => {
+    if (error) {
+      res.status(403).send({ error: 'Acceso no permitido' });
+    } else {
+
+      Ejemplar.findByIdAndRemove(ejemplarId, (err, ejemplar) => {
+        if (err) return res.status(500).send(err);
+        const response = {
+          message: "Ejemplar satisfactoriamente borrada",
+          id: ejemplar._id
+        };
+        return res.status(200).send(response);
+      });
+    }
+  });
+
+
 
 }
-
 
 function getEjemplaresFiltro(req, res){
    let nroColeccion = req.params.unNroColeccion
