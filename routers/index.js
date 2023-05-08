@@ -18,6 +18,12 @@ const coleccionCtrl = require("../controllers/coleccion");
 const fileCtrl = require("../controllers/files");
 const usuarioCtrl = require("../controllers/usuario");
 const documentacionCtrl = require("../controllers/documentacion");
+const denunciaCtrl = require("../controllers/denuncia");
+const prestamoCtrl = require("../controllers/prestamo");
+const replicaCtrl = require("../controllers/replica");
+const donacionCtrl = require("../controllers/donacion");
+const exhibicionCtrl = require("../controllers/exhibicion");
+
 
 const api = express.Router();
 
@@ -26,7 +32,7 @@ const api = express.Router();
 
 //Personas
 api.get("/personas", verifyToken, personaCtrl.getPersonas);
-api.delete("/persona/:personaId", verifyToken, personaCtrl.deletePersona); 
+api.delete("/persona/:personaId", verifyToken, personaCtrl.deletePersona);
 api.get("/personaDni/:personaId", verifyToken, personaCtrl.getPersonaDni);
 api.post("/persona", verifyToken, personaCtrl.savePersona);
 api.put("/persona/:personaId", verifyToken, personaCtrl.updatePersona);
@@ -37,25 +43,25 @@ api.get("/personaId/:personaId", verifyToken, personaCtrl.getPersonaId);
 api.get("/exploracion", verifyToken, exploracionCtrl.getAllExploraciones);
 api.post("/exploracion", verifyToken, exploracionCtrl.saveExploracion);
 api.get("/exploracionId/:exploracionId", verifyToken, exploracionCtrl.getExploracionId);
-api.put("/exploracion/:exploracionId", verifyToken, exploracionCtrl.updateExploracion); 
-api.delete("/exploracion/:exploracionId",verifyToken, exploracionCtrl.deleteExploracion);
+api.put("/exploracion/:exploracionId", verifyToken, exploracionCtrl.updateExploracion);
+api.delete("/exploracion/:exploracionId", verifyToken, exploracionCtrl.deleteExploracion);
 
 //archivos
 api.post("/uploadArchivo", verifyToken, fileCtrl.uploadFile);
 api.get("/deleteArchivo", verifyToken, fileCtrl.deleteFile);
-api.get("/deleteDirectorio", verifyToken,fileCtrl.deleteDirectory);
+api.get("/deleteDirectorio", verifyToken, fileCtrl.deleteDirectory);
 
 
 //Documentacion
-api.get("/documentacion", verifyToken,documentacionCtrl.getDocumentacion);
-api.post("/saveDocumentacion", verifyToken,documentacionCtrl.saveDocumentacion);
+api.get("/documentacion", verifyToken, documentacionCtrl.getDocumentacion);
+api.post("/saveDocumentacion", verifyToken, documentacionCtrl.saveDocumentacion);
 api.get("/documentacionId/:documentacionId", verifyToken, documentacionCtrl.getDocumentacionId);
 api.put("/updateDocumentacion/:documentacionId", verifyToken, documentacionCtrl.updateDocumentacion);
-api.delete("/documentacion/:documentacionId",verifyToken, documentacionCtrl.deleteDocumentacion);
+api.delete("/documentacion/:documentacionId", verifyToken, documentacionCtrl.deleteDocumentacion);
 
 
 // Excavacion
-api.post("/excavacion",  verifyToken, excavacionCtrl.saveExcavacion);
+api.post("/excavacion", verifyToken, excavacionCtrl.saveExcavacion);
 api.get("/excavacion", verifyToken, excavacionCtrl.getAllExcavaciones);
 api.get("/excavacionId/:excavacionId", verifyToken, excavacionCtrl.getExcavacionId);
 api.put("/excavacion/:excavacionId", verifyToken, excavacionCtrl.updateExcavacion);
@@ -63,10 +69,10 @@ api.put("/excavacion/:excavacionId", verifyToken, excavacionCtrl.updateExcavacio
 
 //Ejemplares
 api.get("/ejemplares", verifyToken, ejemplarCtrl.getejemplares);
-api.get("/ejemplarExca/:excavacionId", verifyToken,ejemplarCtrl.getejemplarExca);
-api.put("/ejemplar/:ejemplarId",  verifyToken, ejemplarCtrl.updateEjemplar);
+api.get("/ejemplarExca/:excavacionId", verifyToken, ejemplarCtrl.getejemplarExca);
+api.put("/ejemplar/:ejemplarId", verifyToken, ejemplarCtrl.updateEjemplar);
 api.delete("/ejemplar/:ejemplarId", verifyToken, ejemplarCtrl.deleteEjemplar);
-api.post("/ejemplar", verifyToken,ejemplarCtrl.saveEjemplar);
+api.post("/ejemplar", verifyToken, ejemplarCtrl.saveEjemplar);
 
 
 
@@ -76,7 +82,7 @@ api.post("/bochon", verifyToken, bochonCtrl.saveBochon);
 api.get("/bochon", verifyToken, bochonCtrl.getbochones);
 api.get("/bochonExca/:excavacionId", verifyToken, bochonCtrl.getBochonesExcavacion);
 api.delete("/bochon/:bochonId", verifyToken, bochonCtrl.deleteBochon);
-api.get("/bochonId/:bochonId", verifyToken,bochonCtrl.getbochonId);
+api.get("/bochonId/:bochonId", verifyToken, bochonCtrl.getbochonId);
 api.put("/bochon/:bochonId", verifyToken, bochonCtrl.updateBochon);
 api.get("/bochonEjemplar/:ejemplarId", verifyToken, bochonCtrl.getbochonEjemplar);
 
@@ -87,7 +93,7 @@ api.get("/validaUsuario", usuarioCtrl.validaUsuario);
 api.get("/usuarios", verifyToken, usuarioCtrl.getUsuarios);
 api.delete("/deleteUsuario", verifyToken, usuarioCtrl.deleteUsuario);
 api.get("/existeUsuario", verifyToken, usuarioCtrl.existeUsuario);
-api.post("/saveUsuario", verifyToken,usuarioCtrl.saveUsuario);
+api.post("/saveUsuario", verifyToken, usuarioCtrl.saveUsuario);
 api.get("/getUsuario", verifyToken, usuarioCtrl.getUsuarioId);
 api.put("/editUsuario", verifyToken, usuarioCtrl.updateUsuario);
 
@@ -96,11 +102,11 @@ api.put("/editUsuario", verifyToken, usuarioCtrl.updateUsuario);
 api.get("/coleccion", verifyToken, coleccionCtrl.getColecciones);
 
 //Piezas
-api.post("/pieza", verifyToken,piezaCtrl.savePieza);
+api.post("/pieza", verifyToken, piezaCtrl.savePieza);
 api.get("/piezasEjemplar/:ejemplarId", verifyToken, piezaCtrl.getPiezasEjemplar);
-api.delete("/pieza/:piezaId", verifyToken,piezaCtrl.deletePieza);
+api.delete("/pieza/:piezaId", verifyToken, piezaCtrl.deletePieza);
 api.get("/piezaId/:piezaId", verifyToken, piezaCtrl.getpiezaId);
-api.put("/pieza/:piezaId", verifyToken,piezaCtrl.updatePieza);
+api.put("/pieza/:piezaId", verifyToken, piezaCtrl.updatePieza);
 api.get("/ejemplarId/:ejemplarId", verifyToken, ejemplarCtrl.getejemplarId);
 
 
@@ -131,12 +137,12 @@ api.get("/excavacionHome/:excavacionId", excavacionCtrl.getExcavacionesHome);
 
 api.get("/excavacionDirector/:excavacionId", excavacionCtrl.getExcavacionesDirector);
 api.get("/excavacionPaleontologo/:excavacionId", excavacionCtrl.getExcavacionesPaleontologo);
-api.get( "/excavacionColector/:excavacionId", excavacionCtrl.getExcavacionesColector);
+api.get("/excavacionColector/:excavacionId", excavacionCtrl.getExcavacionesColector);
 api.post("/areaExcavacion", excavacionCtrl.crearExcavacion);
 
-api.get("/excavacionFiltro/:unCodigo&:unNombre",excavacionCtrl.getExcavacionesFiltro);
+api.get("/excavacionFiltro/:unCodigo&:unNombre", excavacionCtrl.getExcavacionesFiltro);
 api.get("/excavacionFiltroCode/:unCodigo", excavacionCtrl.getExcavacionesFiltroCode);
-api.get("/excavacionFiltroName/:unNombre",excavacionCtrl.getExcavacionesFiltroName);
+api.get("/excavacionFiltroName/:unNombre", excavacionCtrl.getExcavacionesFiltroName);
 api.put("/excavacionBochon/:excavacionId", excavacionCtrl.updateExcavacionBochones);
 
 api.get("/bochonCampo/:bochonId", bochonCtrl.getbochonCampo);
@@ -165,8 +171,8 @@ api.get("/pieza", piezaCtrl.getpiezas);
 
 
 api.get(
-  "/ejemplarNroColeccion/:ejemplarId",
-  ejemplarCtrl.getejemplarNroColeccion
+    "/ejemplarNroColeccion/:ejemplarId",
+    ejemplarCtrl.getejemplarNroColeccion
 );
 api.get("/ejemplarHome/:ejemplarId", ejemplarCtrl.getejemplarHome);
 api.get("/ejemplarPorFoto/:fotoId", ejemplarCtrl.getEjemplarPorIdFoto);
@@ -179,8 +185,8 @@ api.get("/areaExploracion", exploracionCtrl.getExploraciones);
 api.post("/areaExploracion", exploracionCtrl.crearAreaExploracion);
 api.delete("/exploracion", exploracionCtrl.borrarExploraciones);
 api.put(
-  "/areaExploracion/:exploracionId",
-  exploracionCtrl.modificarAreaExploracion
+    "/areaExploracion/:exploracionId",
+    exploracionCtrl.modificarAreaExploracion
 );
 
 // Area
@@ -192,8 +198,8 @@ api.put(
 
 
 api.get(
-  "/exploracionesFiltro/:unNombre",
-  exploracionCtrl.getExploracionesFiltro
+    "/exploracionesFiltro/:unNombre",
+    exploracionCtrl.getExploracionesFiltro
 );
 
 
@@ -218,29 +224,29 @@ api.get("/area", areaCtrl.getAreas);
 
 
 api.get(
-  "/ejemplarFiltro/:unNroColeccion&:unNombre&:unaUbicacion",
-  ejemplarCtrl.getEjemplaresFiltro
+    "/ejemplarFiltro/:unNroColeccion&:unNombre&:unaUbicacion",
+    ejemplarCtrl.getEjemplaresFiltro
 );
 api.get(
-  "/ejemplarFiltroNroColNom/:unNroColeccion&:unNombre",
-  ejemplarCtrl.getEjemplaresNroColNom
+    "/ejemplarFiltroNroColNom/:unNroColeccion&:unNombre",
+    ejemplarCtrl.getEjemplaresNroColNom
 );
 api.get(
-  "/ejemplarFiltroUbicacionNom/:unaUbicacion&:unNombre",
-  ejemplarCtrl.getEjemplaresUbicacionNom
+    "/ejemplarFiltroUbicacionNom/:unaUbicacion&:unNombre",
+    ejemplarCtrl.getEjemplaresUbicacionNom
 );
 api.get(
-  "/ejemplarFiltroUbicacionNroCol/:unaUbicacion&:unNroColeccion",
-  ejemplarCtrl.getEjemplaresUbicacionNroCol
+    "/ejemplarFiltroUbicacionNroCol/:unaUbicacion&:unNroColeccion",
+    ejemplarCtrl.getEjemplaresUbicacionNroCol
 );
 api.get(
-  "/ejemplarFiltroNroColeccion/:unNroColeccion",
-  ejemplarCtrl.getEjemplaresNroColeccion
+    "/ejemplarFiltroNroColeccion/:unNroColeccion",
+    ejemplarCtrl.getEjemplaresNroColeccion
 );
 api.get("/ejemplarFiltroNombre/:unNombre", ejemplarCtrl.getEjemplaresNombre);
 api.get(
-  "/ejemplarFiltroUbicacion/:unaUbicacion",
-  ejemplarCtrl.getEjemplaresUbicacion
+    "/ejemplarFiltroUbicacion/:unaUbicacion",
+    ejemplarCtrl.getEjemplaresUbicacion
 );
 
 //acidos
@@ -251,25 +257,57 @@ api.get("/tipoPreparacion", tiposPreparacionCtrl.getTiposPreparacion);
 
 //acidos
 
+//Denuncia
+api.get("/denuncias",verifyToken, denunciaCtrl.getdenuncias);
+api.get("/denunciaId/:denunciaId", verifyToken, denunciaCtrl.getdenunciaId);
+api.put("/denuncia/:denunciaId", verifyToken, denunciaCtrl.updateDenuncia);
+api.delete("/denuncia/:denunciaId", verifyToken, denunciaCtrl.deleteDenuncia);
+api.post("/denuncia", verifyToken, denunciaCtrl.saveDenuncia);
 
+//Prestamos
+api.get("/prestamos", verifyToken, prestamoCtrl.getprestamos);
+api.get("/prestamoId/:prestamoId", verifyToken, prestamoCtrl.getprestamoId);
+api.put("/prestamo/:prestamoId", verifyToken, prestamoCtrl.updatePrestamo);
+api.delete("/prestamo/:prestamoId", verifyToken, prestamoCtrl.deletePrestamo);
+api.post("/prestamo", verifyToken, prestamoCtrl.savePrestamo);
 
+//Replica
+api.get("/replicas", verifyToken, replicaCtrl.getReplicas);
+api.get("/replicaId/:replicaId", verifyToken, replicaCtrl.getReplicaId);
+api.put("/replica/:replicaId", verifyToken, replicaCtrl.updateReplica);
+api.delete("/replica/:replicaId", verifyToken, replicaCtrl.deleteReplica);
+api.post("/replica", verifyToken, replicaCtrl.saveReplica);
+
+//Donacion
+api.get("/donaciones", verifyToken, donacionCtrl.getDonaciones);
+api.get("/donacionId/:donacionId", verifyToken, donacionCtrl.getDonacionId);
+api.put("/donacion/:donacionId", verifyToken, donacionCtrl.updateDonacion);
+api.delete("/donacion/:donacionId", verifyToken, donacionCtrl.deleteDonacion);
+api.post("/donacion", verifyToken, donacionCtrl.saveDonacion);
+
+//Exhibicion
+api.get("/exhibiciones", verifyToken, exhibicionCtrl.getExhibiciones);
+api.get("/exhibicionId/:exhibicionId", verifyToken, exhibicionCtrl.getExhibicionId);
+api.put("/exhibicion/:exhibicionId", verifyToken, exhibicionCtrl.updateExhibicion);
+api.delete("/exhibicion/:exhibicionId", verifyToken, exhibicionCtrl.deleteExhibicion);
+api.post("/exhibicion", verifyToken, exhibicionCtrl.saveExhibicion);
 
 
 
 // Authorization: Bearer <token>
-function verifyToken(req, res, next){
+function verifyToken(req, res, next) {
 
-         const bearerHeader =  req.headers['authorization'];
+    const bearerHeader = req.headers['authorization'];
 
-     if(typeof bearerHeader !== 'undefined'){
-         const bearerToken = bearerHeader.split(" ")[1];
-          req.token  = bearerToken;
+    if (typeof bearerHeader !== 'undefined') {
+        const bearerToken = bearerHeader.split(" ")[1];
+        req.token = bearerToken;
         //console.log('TOKEN:::: ',bearerToken);
-          next();    
-          
-     }else{
-         res.sendStatus(403);
-     }
+        next();
+
+    } else {
+        res.sendStatus(403);
+    }
 }
 
 module.exports = api;
